@@ -1,3 +1,5 @@
+import GlassCard from '@/components/ui/GlassCard'
+import ScoreBadge from '@/components/ui/ScoreBadge'
 import { useVideoState } from '@/hooks/useVideoState'
 
 interface IPVideoPlayerProps {
@@ -9,10 +11,13 @@ function IPVideoPlayer({ ipId, score }: IPVideoPlayerProps) {
   const { currentSrc, state } = useVideoState(ipId, score)
 
   return (
-    <div className="glass-light rounded-glass p-4 text-white">
-      <p className="mb-2 text-sm">IP 状态：{state}</p>
-      <video className="aspect-video w-full rounded-glass object-cover" muted loop playsInline src={currentSrc} />
-    </div>
+    <GlassCard eyebrow="ip state" title="角色状态机" tone="medium">
+      <div className="mb-4 flex items-center justify-between">
+        <span className="rounded-pill border border-white/14 px-3 py-1 text-xs text-white/62">{state}</span>
+        <ScoreBadge label={ipId} score={score} />
+      </div>
+      <video className="aspect-video w-full rounded-glass border border-white/12 object-cover" muted loop playsInline src={currentSrc} />
+    </GlassCard>
   )
 }
 

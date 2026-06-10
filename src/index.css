@@ -6,12 +6,60 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  font-family: 'Noto Sans SC', sans-serif;
+:root {
+  color-scheme: dark;
+  --forest-deep: #0f1c15;
+  --forest-dark: #1f2a1d;
+  --forest-mid: #2d3a2a;
+  --surface-glass-light: rgba(255, 255, 255, 0.065);
+  --surface-glass-medium: rgba(255, 255, 255, 0.12);
+  --surface-glass-strong: rgba(255, 255, 255, 0.18);
+  --line-soft: rgba(255, 255, 255, 0.14);
+  --line-bright: rgba(255, 255, 255, 0.24);
+  --text-primary: rgba(255, 255, 255, 0.94);
+  --text-secondary: rgba(255, 255, 255, 0.68);
+  --text-muted: rgba(255, 255, 255, 0.46);
+  --shadow-glass: 0 18px 48px rgba(0, 0, 0, 0.24);
+  --shadow-card: 0 16px 38px rgba(4, 10, 7, 0.2);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html, body, #root {
   height: 100%;
   margin: 0;
   -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-width: 1200px;
+  overflow-x: auto;
+  background:
+    radial-gradient(circle at 18% 10%, rgba(168, 216, 255, 0.1), transparent 30%),
+    radial-gradient(circle at 85% 8%, rgba(255, 232, 168, 0.08), transparent 28%),
+    linear-gradient(135deg, #0f1c15 0%, #1f2a1d 48%, #0f1c15 100%);
+  color: var(--text-primary);
+  font-family: 'Noto Sans SC', 'Noto Serif SC', sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+::selection {
+  background: rgba(168, 255, 180, 0.32);
+}
+
+.app-shell {
+  min-height: 100vh;
+  color: var(--text-primary);
+}
+
+.surface-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
 }

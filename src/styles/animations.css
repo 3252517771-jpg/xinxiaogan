@@ -1,5 +1,17 @@
 .fade-in {
-  animation: fade-in 220ms ease-out both;
+  animation: fade-in 260ms var(--ease-out) both;
+}
+
+.lift-on-hover {
+  transition:
+    transform 180ms var(--ease-out),
+    border-color 180ms var(--ease-out),
+    background 180ms var(--ease-out),
+    box-shadow 180ms var(--ease-out);
+}
+
+.lift-on-hover:hover {
+  transform: translateY(-2px);
 }
 
 @keyframes fade-in {

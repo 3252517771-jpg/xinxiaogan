@@ -1,17 +1,33 @@
 .glass-light {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px) saturate(130%);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.095), rgba(255, 255, 255, 0.045));
+  border: 1px solid var(--line-soft);
+  box-shadow: var(--shadow-glass);
+  backdrop-filter: blur(14px) saturate(128%);
 }
 
 .glass-medium {
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px) saturate(120%);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.075));
+  border: 1px solid var(--line-bright);
+  box-shadow: var(--shadow-glass);
+  backdrop-filter: blur(16px) saturate(122%);
 }
 
 .glass-strong {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(16px) saturate(130%);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.11));
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: 0 24px 72px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(20px) saturate(135%);
+}
+
+.glass-edge {
+  position: relative;
+}
+
+.glass-edge::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: '';
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }

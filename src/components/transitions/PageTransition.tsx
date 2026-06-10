@@ -5,7 +5,7 @@ interface PageTransitionProps {
 }
 
 function PageTransition({ children }: PageTransitionProps) {
-  return <main className="fade-in min-h-screen px-12 py-10">{children}</main>
+  return <main className="app-shell fade-in min-h-screen px-12 py-10">{children}</main>
 }
 
 export default PageTransition

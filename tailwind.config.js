@@ -27,7 +27,7 @@ export default {
         sans: ['"Noto Sans SC"', 'sans-serif'],
       },
       borderRadius: {
-        glass: '20px',
+        glass: '8px',
         pill: '9999px',
       },
     },
