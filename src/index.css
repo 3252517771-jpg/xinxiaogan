@@ -1,3 +1,7 @@
+@import './styles/glass.css';
+@import './styles/animations.css';
+@import './styles/react-bits-override.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
