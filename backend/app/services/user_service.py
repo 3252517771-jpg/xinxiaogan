@@ -17,20 +17,28 @@ def _to_profile_response(profile: UserProfile) -> UserProfileResponse:
         height_cm=profile.height_cm,
         weight_kg=profile.weight_kg,
         timezone=profile.timezone,
-        wechat_sendkey=profile.wechat_sendkey,
+        wechat_sendkey=None,
+        has_wechat_sendkey=bool(profile.wechat_sendkey),
         enable_ai_advice=profile.enable_ai_advice,
         enable_push=profile.enable_push,
     )
 
 
 async def get_user_profile(db: AsyncSession, current_user: User) -> UserProfileResponse:
-    profile = await db.scalar(select(UserProfile).where(UserProfile.user_id == current_user.id))
-    if profile is None:
-        profile = UserProfile(user_id=current_user.id, nickname=current_user.username)
-        db.add(profile)
-        await db.commit()
-        await db.refresh(profile)
+    profile = await get_or_create_user_profile_model(db, current_user)
     return _to_profile_response(profile)
+
+
+async def get_or_create_user_profile_model(db: AsyncSession, current_user: User) -> UserProfile:
+    profile = await db.scalar(select(UserProfile).where(UserProfile.user_id == current_user.id))
+    if profile is not None:
+        return profile
+
+    profile = UserProfile(user_id=current_user.id, nickname=current_user.username)
+    db.add(profile)
+    await db.commit()
+    await db.refresh(profile)
+    return profile
 
 
 async def update_user_profile(
@@ -46,6 +54,8 @@ async def update_user_profile(
 
     updates = payload.model_dump(exclude_unset=True)
     for key, value in updates.items():
+        if key == "wechat_sendkey" and value is None:
+            continue
         setattr(profile, key, value)
 
     await db.commit()

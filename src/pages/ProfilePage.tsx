@@ -35,11 +35,11 @@ function ProfilePage() {
             </div>
             <div className="flex items-center gap-3 self-start">
               <Link to={ROUTES.HOME}>
-                <PillButton className="border-black/10 text-forest-deep hover:border-black/18 hover:bg-black/5" variant="outline">
+                <PillButton className="border-[#8a5a44]/24 bg-[#fff8ee]/78 text-[#4d2f22] shadow-[0_10px_24px_rgba(82,45,24,0.12)] hover:border-[#8a5a44]/38 hover:bg-[#fff3df]" variant="outline">
                   返回首页
                 </PillButton>
               </Link>
-              <PillButton className="border-black/10 text-forest-deep hover:border-black/18 hover:bg-black/5" onClick={handleLogout} variant="outline">
+              <PillButton className="border-[#8a5a44]/24 bg-[#fff8ee]/78 text-[#4d2f22] shadow-[0_10px_24px_rgba(82,45,24,0.12)] hover:border-[#8a5a44]/38 hover:bg-[#fff3df]" onClick={handleLogout} variant="outline">
                 退出登录
               </PillButton>
             </div>

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import FieldInput from '@/components/ui/FieldInput'
 import PillButton from '@/components/ui/PillButton'
 import Toast from '@/components/ui/Toast'
-import { request } from '@/services/api'
+import { pushTest, request } from '@/services/api'
 import type { UserProfile } from '@/types/user'
 
 type ProfileDraft = Omit<UserProfile, 'id' | 'user_id'>
@@ -28,7 +28,9 @@ function ProfileForm({ formId = 'profile-form', onSaved }: ProfileFormProps) {
   const [profile, setProfile] = useState<ProfileDraft>(EMPTY_PROFILE)
   const [message, setMessage] = useState<string | null>(null)
   const [isSaving, setIsSaving] = useState(false)
+  const [isTestingPush, setIsTestingPush] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [hasSavedSendKey, setHasSavedSendKey] = useState(false)
 
   function updateProfile<K extends keyof ProfileDraft>(key: K, value: ProfileDraft[K]) {
     setProfile((current) => ({
@@ -53,10 +55,11 @@ function ProfileForm({ formId = 'profile-form', onSaved }: ProfileFormProps) {
         height_cm: response.height_cm,
         weight_kg: response.weight_kg,
         timezone: response.timezone,
-        wechat_sendkey: response.wechat_sendkey,
+        wechat_sendkey: null,
         enable_ai_advice: response.enable_ai_advice,
         enable_push: response.enable_push,
       })
+      setHasSavedSendKey(Boolean(response.has_wechat_sendkey))
       setMessage('资料已保存，当前档案和 AI 设置已同步。')
       onSaved?.()
     } catch (error) {
@@ -64,6 +67,20 @@ function ProfileForm({ formId = 'profile-form', onSaved }: ProfileFormProps) {
       setMessage(nextMessage)
     } finally {
       setIsSaving(false)
+    }
+  }
+
+  async function handlePushTest() {
+    setIsTestingPush(true)
+
+    try {
+      const result = await pushTest()
+      setMessage(result.message)
+    } catch (error) {
+      const nextMessage = error instanceof Error ? error.message : '推送测试失败'
+      setMessage(nextMessage)
+    } finally {
+      setIsTestingPush(false)
     }
   }
 
@@ -84,10 +101,11 @@ function ProfileForm({ formId = 'profile-form', onSaved }: ProfileFormProps) {
           height_cm: response.height_cm,
           weight_kg: response.weight_kg,
           timezone: response.timezone,
-          wechat_sendkey: response.wechat_sendkey,
+          wechat_sendkey: null,
           enable_ai_advice: response.enable_ai_advice,
           enable_push: response.enable_push,
         })
+        setHasSavedSendKey(Boolean(response.has_wechat_sendkey))
       } catch (error) {
         if (isMounted) {
           setMessage(error instanceof Error ? error.message : '资料加载失败')
@@ -146,11 +164,20 @@ function ProfileForm({ formId = 'profile-form', onSaved }: ProfileFormProps) {
         <FieldInput hint="IANA" label="时区" onChange={(event) => updateProfile('timezone', event.target.value)} value={profile.timezone} />
       </div>
       <FieldInput
-        hint="SCT..."
+        hint={hasSavedSendKey ? '已绑定，填写新 SendKey 可覆盖' : 'SCT...'}
         label="SendKey"
         onChange={(event) => updateProfile('wechat_sendkey', event.target.value || null)}
         value={profile.wechat_sendkey ?? ''}
       />
+      <div className="flex items-center justify-between gap-4 rounded-glass border border-white/12 bg-white/6 px-4 py-3">
+        <div>
+          <p className="text-sm font-semibold text-white">微信推送测试</p>
+          <p className="text-xs text-white/52">先保存 SendKey，再发送一条 Server 酱测试消息。</p>
+        </div>
+        <PillButton disabled={isLoading || isTestingPush || (!hasSavedSendKey && !profile.wechat_sendkey)} onClick={handlePushTest} type="button" variant="outline">
+          {isTestingPush ? '测试中...' : '测试推送'}
+        </PillButton>
+      </div>
       <div className="grid grid-cols-2 gap-4 rounded-glass border border-white/12 bg-white/6 px-4 py-4">
         <label className="flex items-center justify-between gap-4 text-sm text-white/78">
           <span>

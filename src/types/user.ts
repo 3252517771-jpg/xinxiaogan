@@ -16,6 +16,7 @@ export interface UserProfile {
   weight_kg: number | null
   timezone: string
   wechat_sendkey?: string | null
+  has_wechat_sendkey?: boolean
   enable_ai_advice?: boolean
   enable_push?: boolean
 }

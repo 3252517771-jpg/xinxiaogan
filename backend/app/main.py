@@ -1,25 +1,36 @@
 from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.config import get_settings
-from app.database import dispose_engine, init_database, ping_database
+from app.database import AsyncSessionLocal, dispose_engine, init_database, ping_database
 from app.routers.auth import router as auth_router
 from app.routers.behavior import router as behavior_router
 from app.routers.health import router as health_router
 from app.routers.user import router as user_router
+from app.services.push_service import register_push_jobs
 from app.services.risk_predictor import load_models
+
+scheduler = AsyncIOScheduler(timezone="Asia/Shanghai")
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     await init_database()
     load_models()
-    yield
-    await dispose_engine()
+    if get_settings().enable_push:
+        register_push_jobs(scheduler, AsyncSessionLocal)
+        scheduler.start()
+    try:
+        yield
+    finally:
+        if scheduler.running:
+            scheduler.shutdown(wait=False)
+        await dispose_engine()
 
 
 settings = get_settings()

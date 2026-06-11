@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import date
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.health import DietRecord, ExerciseRecord, SleepRecord, StressRecord
@@ -14,6 +14,8 @@ from app.schemas.health import (
     DietSubmitResponse,
     HealthHistoryItem,
     HealthHistoryResponse,
+    HealthTrendPoint,
+    HealthTrendResponse,
     LatestHealthResponse,
     ExerciseCreateRequest,
     ExerciseRecordResponse,
@@ -195,6 +197,56 @@ async def get_latest_health_records(db: AsyncSession, current_user: User) -> Lat
         stress=_stress_response(stress) if stress else None,
         risk=_risk_response(risk) if risk else None,
     )
+
+
+async def get_health_trend(db: AsyncSession, current_user: User, days: int = 7) -> HealthTrendResponse:
+    bounded_days = max(1, min(days, 30))
+    today = date.today()
+    start_date = today.fromordinal(today.toordinal() - bounded_days + 1)
+    day_keys = [start_date.fromordinal(start_date.toordinal() + offset) for offset in range(bounded_days)]
+    trend_by_day: dict[date, dict[str, int | None]] = {
+        day: {"sleep": None, "diet": None, "exercise": None, "stress": None, "risk": None}
+        for day in day_keys
+    }
+
+    async def load_dimension(model, key: str) -> None:
+        rows = await db.execute(
+            select(model.record_date, func.avg(model.score))
+            .where(
+                model.user_id == current_user.id,
+                model.record_date >= start_date,
+                model.record_date <= today,
+            )
+            .group_by(model.record_date)
+        )
+        for record_date, average_score in rows.all():
+            if record_date in trend_by_day:
+                trend_by_day[record_date][key] = round(float(average_score))
+
+    await load_dimension(SleepRecord, "sleep")
+    await load_dimension(DietRecord, "diet")
+    await load_dimension(ExerciseRecord, "exercise")
+    await load_dimension(StressRecord, "stress")
+    await load_dimension(RiskRecord, "risk")
+
+    points: list[HealthTrendPoint] = []
+    for day in day_keys:
+        values = trend_by_day[day]
+        dimension_scores = [score for score in values.values() if score is not None]
+        overall = round(sum(dimension_scores) / len(dimension_scores)) if dimension_scores else None
+        points.append(
+            HealthTrendPoint(
+                date=day.isoformat(),
+                overall=overall,
+                sleep=values["sleep"],
+                diet=values["diet"],
+                exercise=values["exercise"],
+                stress=values["stress"],
+                risk=values["risk"],
+            )
+        )
+
+    return HealthTrendResponse(days=bounded_days, points=points)
 
 
 async def submit_sleep_record(db: AsyncSession, current_user: User, payload: SleepCreateRequest) -> SleepSubmitResponse:

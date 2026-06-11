@@ -1,9 +1,12 @@
+import { useEffect, useState } from 'react'
 import MergedShape from '@/components/ui/MergedShape'
 import ScrollStack, { ScrollStackItem } from '@/components/ui/ScrollStack'
 import { IP_CHARACTERS } from '@/config/constants'
 import { DETAIL_ROUTES } from '@/config/routes'
 import type { HealthDimension } from '@/config/routes'
+import { request } from '@/services/api'
 import { useTransitionStore } from '@/store/transitionStore'
+import type { LatestHealthResponse } from '@/types/health'
 
 const DIMENSION_ACCENTS: Record<HealthDimension, string> = {
   sleep: '#A8D8FF',
@@ -21,9 +24,54 @@ const DIMENSION_STATUS: Record<HealthDimension, { status: string; description: s
   risk: { status: '待录入', description: '还没有体征记录，提交后再运行风险预测。' },
 }
 
+function buildLatestDescription(dimension: HealthDimension, latest: LatestHealthResponse | null) {
+  const record = latest?.[dimension]
+  if (!record) {
+    return DIMENSION_STATUS[dimension]
+  }
+
+  const summaries: Record<HealthDimension, string> = {
+    sleep: `最近记录 ${record.record_date}，作息评分已同步。`,
+    diet: `最近记录 ${record.record_date}，饮食评分已同步。`,
+    exercise: `最近记录 ${record.record_date}，运动评分已同步。`,
+    stress: `最近记录 ${record.record_date}，压力评分已同步。`,
+    risk: `最近记录 ${record.record_date}，风险评分已同步。`,
+  }
+
+  return {
+    status: '已记录',
+    description: summaries[dimension],
+    score: record.score,
+  }
+}
+
 function DimensionCardStack() {
   const { queueTransition } = useTransitionStore()
+  const [latest, setLatest] = useState<LatestHealthResponse | null>(null)
   const fallbackTransitionVideo = IP_CHARACTERS.sleep?.transitionVideo ?? 'T-01.mp4'
+
+  useEffect(() => {
+    let isMounted = true
+
+    async function loadLatest() {
+      try {
+        const response = await request<LatestHealthResponse>('/health/latest')
+        if (isMounted) {
+          setLatest(response)
+        }
+      } catch {
+        if (isMounted) {
+          setLatest(null)
+        }
+      }
+    }
+
+    void loadLatest()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   return (
     <section aria-label="ScrollStack 健康维度卡片" className="flex justify-center">
@@ -40,7 +88,7 @@ function DimensionCardStack() {
       >
         {DETAIL_ROUTES.map((route, index) => {
           const dimension: HealthDimension = route.dimension ?? 'exercise'
-          const detail = DIMENSION_STATUS[dimension]
+          const detail = buildLatestDescription(dimension, latest)
           const transitionVideo = IP_CHARACTERS[dimension]?.transitionVideo ?? fallbackTransitionVideo
 
           return (
@@ -63,7 +111,9 @@ function DimensionCardStack() {
                 <MergedShape accent={DIMENSION_ACCENTS[dimension]} label="健康维度">
                   <div className="flex items-center justify-between gap-3">
                     <h2 className="text-2xl font-semibold">{route.label}</h2>
-                    <span className="rounded-pill bg-forest-deep/8 px-2 py-1 text-xs font-semibold">--</span>
+                    <span className="rounded-pill bg-forest-deep/8 px-2 py-1 text-xs font-semibold">
+                      {'score' in detail ? detail.score : '--'}
+                    </span>
                   </div>
                   <div className="mt-5 flex items-center gap-2 text-sm font-semibold">
                     <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: DIMENSION_ACCENTS[dimension] }} />

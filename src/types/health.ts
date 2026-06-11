@@ -54,6 +54,22 @@ export interface LatestHealthResponse {
   risk: RiskRecord | null
 }
 
+export interface HealthTrendPoint {
+  date: string
+  overall: number | null
+  sleep: number | null
+  diet: number | null
+  exercise: number | null
+  stress: number | null
+  risk: number | null
+}
+
+export interface HealthTrendResponse {
+  ok: boolean
+  days: number
+  points: HealthTrendPoint[]
+}
+
 export interface RiskMutationResponse extends HealthMutationResponse<RiskRecord>, RiskPrediction {
   behavior_tags: BehaviorInsight[]
   ai_advice: string

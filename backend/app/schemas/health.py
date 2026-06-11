@@ -139,3 +139,19 @@ class LatestHealthResponse(BaseModel):
     exercise: ExerciseRecordResponse | None = None
     stress: StressRecordResponse | None = None
     risk: RiskRecordResponse | None = None
+
+
+class HealthTrendPoint(BaseModel):
+    date: str
+    overall: int | None = None
+    sleep: int | None = None
+    diet: int | None = None
+    exercise: int | None = None
+    stress: int | None = None
+    risk: int | None = None
+
+
+class HealthTrendResponse(BaseModel):
+    ok: bool = True
+    days: int
+    points: list[HealthTrendPoint]

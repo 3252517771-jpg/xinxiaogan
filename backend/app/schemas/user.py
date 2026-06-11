@@ -13,6 +13,7 @@ class UserProfileResponse(BaseModel):
     weight_kg: float | None = None
     timezone: str
     wechat_sendkey: str | None = None
+    has_wechat_sendkey: bool = False
     enable_ai_advice: bool = True
     enable_push: bool = False
 
@@ -27,3 +28,8 @@ class UserProfileUpdateRequest(BaseModel):
     wechat_sendkey: str | None = None
     enable_ai_advice: bool | None = None
     enable_push: bool | None = None
+
+
+class PushTestResponse(BaseModel):
+    success: bool
+    message: str

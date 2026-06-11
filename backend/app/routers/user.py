@@ -5,8 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.models.user import User
-from app.schemas.user import UserProfileResponse, UserProfileUpdateRequest
-from app.services.user_service import get_user_profile, update_user_profile
+from app.schemas.user import PushTestResponse, UserProfileResponse, UserProfileUpdateRequest
+from app.services.push_service import send_profile_push_test
+from app.services.user_service import get_or_create_user_profile_model, get_user_profile, update_user_profile
 from app.utils.dependencies import get_current_user
 
 
@@ -28,3 +29,13 @@ async def save_profile(
     current_user: User = Depends(get_current_user),
 ) -> UserProfileResponse:
     return await update_user_profile(db, current_user, payload)
+
+
+@router.post("/push-test", response_model=PushTestResponse)
+async def push_test(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> PushTestResponse:
+    profile = await get_or_create_user_profile_model(db, current_user)
+    result = await send_profile_push_test(profile)
+    return PushTestResponse(success=result.success, message=result.message)

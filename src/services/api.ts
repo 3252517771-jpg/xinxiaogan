@@ -52,3 +52,14 @@ export async function request<T>(endpoint: string, options: RequestInit = {}): P
 
   return response.json() as Promise<T>
 }
+
+export interface PushTestResult {
+  success: boolean
+  message: string
+}
+
+export function pushTest(): Promise<PushTestResult> {
+  return request<PushTestResult>('/user/push-test', {
+    method: 'POST',
+  })
+}

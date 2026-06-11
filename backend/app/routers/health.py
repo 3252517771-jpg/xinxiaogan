@@ -9,6 +9,7 @@ from app.schemas.health import (
     ExerciseCreateRequest,
     ExerciseSubmitResponse,
     HealthHistoryResponse,
+    HealthTrendResponse,
     LatestHealthResponse,
     SleepCreateRequest,
     SleepSubmitResponse,
@@ -18,6 +19,7 @@ from app.schemas.health import (
 from app.schemas.risk import RiskCreateRequest, RiskSubmitResponse
 from app.services.health_service import (
     get_latest_health_records,
+    get_health_trend,
     list_health_history,
     submit_diet_record,
     submit_exercise_record,
@@ -45,6 +47,15 @@ async def get_latest(
     current_user: User = Depends(get_current_user),
 ) -> LatestHealthResponse:
     return await get_latest_health_records(db, current_user)
+
+
+@router.get("/trend", response_model=HealthTrendResponse)
+async def get_trend(
+    days: int = 7,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> HealthTrendResponse:
+    return await get_health_trend(db, current_user, days)
 
 
 @router.post("/sleep", response_model=SleepSubmitResponse)

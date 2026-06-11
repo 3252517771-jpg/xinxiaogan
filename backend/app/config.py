@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     deepseek_base_url: str = Field(default="https://api.deepseek.com")
     deepseek_model: str = Field(default="deepseek-chat")
     enable_ai_advice: bool = Field(default=True)
+    enable_push: bool = Field(default=True)
 
     model_config = SettingsConfigDict(
         env_file=".env",
