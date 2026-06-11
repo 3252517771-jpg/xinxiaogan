@@ -4,7 +4,7 @@ import PillButton from '@/components/ui/PillButton'
 import StarRating from '@/components/ui/StarRating'
 import Toast from '@/components/ui/Toast'
 import { useMockSubmit } from '@/hooks/useMockSubmit'
-import type { SleepRecord } from '@/types/health'
+import type { HealthMutationResponse, SleepRecord } from '@/types/health'
 
 interface SleepPayload {
   sleep_time: string
@@ -14,7 +14,7 @@ interface SleepPayload {
 }
 
 interface SleepFormProps {
-  onSubmitted?: (score: number) => void
+  onSubmitted?: (response: HealthMutationResponse<SleepRecord>) => void
 }
 
 function SleepForm({ onSubmitted }: SleepFormProps) {
@@ -34,7 +34,7 @@ function SleepForm({ onSubmitted }: SleepFormProps) {
     })
 
     if (response) {
-      onSubmitted?.(response.score)
+      onSubmitted?.(response)
     }
   }
 

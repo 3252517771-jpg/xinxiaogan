@@ -44,3 +44,4 @@ class RiskSubmitResponse(BaseModel):
     risk_probability: float = Field(ge=0.0, le=1.0)
     risk_alert: bool
     behavior_tags: list[BehaviorInsight] = []
+    ai_advice: str

@@ -30,6 +30,7 @@ interface MutationResponse<T> {
   score: number
   record: T
   behavior_tags: typeof mockBehaviorHighlights
+  ai_advice: string
 }
 
 const MOCK_DELAY_MS = 120
@@ -89,6 +90,7 @@ function mutateHealthRecord<T extends { id: string; score: number }>(
     score: nextRecord.score,
     record: nextRecord,
     behavior_tags: [],
+    ai_advice: '今天先把节奏稳住一点，按当前记录继续微调，比一次改很多更容易坚持。',
   }
 }
 
@@ -143,6 +145,10 @@ export async function mockRequest<T>({ endpoint, method, body }: MockRequestInpu
                   },
                 ]
               : [],
+          ai_advice:
+            payload.systolic_bp && payload.systolic_bp >= 145
+              ? '这次体征有点往高风险方向偏了，先尽快复测一次，并把最近作息和饮食一起收紧。'
+              : '当前体征比较稳定，继续规律记录，优先关注一周内的连续变化。',
         } as T
       }
       return mutateHealthRecord(mockHealthRecords[dimension], body) as T

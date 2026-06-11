@@ -1,0 +1,32 @@
+{
+  "profile": {
+    "id": "83dd1930-d23d-4a0d-b436-ebeabdffdeab",
+    "user_id": "5fb22f0e-5e3f-4dc5-b182-f932e29fd9de",
+    "nickname": "s3_fallback_user",
+    "age": null,
+    "gender": null,
+    "height_cm": null,
+    "weight_kg": null,
+    "timezone": "Asia/Shanghai",
+    "wechat_sendkey": null,
+    "enable_ai_advice": false,
+    "enable_push": false
+  },
+  "sleep": {
+    "ok": true,
+    "score": 16,
+    "record": {
+      "id": "ca36d216-60b2-4bde-b469-3c69be9bba4f",
+      "user_id": "5fb22f0e-5e3f-4dc5-b182-f932e29fd9de",
+      "record_date": "2026-06-12",
+      "sleep_time": "01:40",
+      "wake_time": "06:20",
+      "sleep_quality": 2,
+      "interruption_count": 3,
+      "score": 16,
+      "notes": null
+    },
+    "behavior_tags": [],
+    "ai_advice": "这段时间先别硬撑，今晚优先补足睡眠，把入睡时间慢慢往前挪一点点。"
+  }
+}

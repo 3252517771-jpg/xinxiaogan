@@ -13,12 +13,12 @@ const DIMENSION_ACCENTS: Record<HealthDimension, string> = {
   risk: '#FFE8A8',
 }
 
-const DIMENSION_STATUS: Record<HealthDimension, { status: string; score: number; description: string }> = {
-  sleep: { status: '优秀', score: 83, description: '入睡节律稳定，今晚继续守住 23:00 前。' },
-  diet: { status: '一般', score: 74, description: '三餐完整度不错，晚餐可以更轻一点。' },
-  exercise: { status: '偏低', score: 58, description: '久坐时间偏长，适合补一段轻运动。' },
-  stress: { status: '优秀', score: 86, description: '情绪曲线平稳，保持当下的节奏。' },
-  risk: { status: '良好', score: 79, description: '体征整体可控，继续关注睡眠和运动。' },
+const DIMENSION_STATUS: Record<HealthDimension, { status: string; description: string }> = {
+  sleep: { status: '待录入', description: '还没有作息记录，进入详情页记录今天的睡眠。' },
+  diet: { status: '待录入', description: '还没有饮食记录，先从一次真实餐次开始。' },
+  exercise: { status: '待录入', description: '还没有运动记录，提交后再生成运动建议。' },
+  stress: { status: '待录入', description: '还没有压力自评，完成后会生成陪伴建议。' },
+  risk: { status: '待录入', description: '还没有体征记录，提交后再运行风险预测。' },
 }
 
 function DimensionCardStack() {
@@ -63,7 +63,7 @@ function DimensionCardStack() {
                 <MergedShape accent={DIMENSION_ACCENTS[dimension]} label="健康维度">
                   <div className="flex items-center justify-between gap-3">
                     <h2 className="text-2xl font-semibold">{route.label}</h2>
-                    <span className="rounded-pill bg-forest-deep/8 px-2 py-1 text-xs font-semibold">{detail.score}</span>
+                    <span className="rounded-pill bg-forest-deep/8 px-2 py-1 text-xs font-semibold">--</span>
                   </div>
                   <div className="mt-5 flex items-center gap-2 text-sm font-semibold">
                     <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: DIMENSION_ACCENTS[dimension] }} />

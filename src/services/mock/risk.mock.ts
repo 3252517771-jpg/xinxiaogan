@@ -21,6 +21,7 @@ export const mockRiskPrediction: RiskMutationResponse = {
   risk_probability: 0.912,
   risk_alert: false,
   behavior_tags: [],
+  ai_advice: '当前体征比较稳定，继续保持规律记录，重点观察趋势是否持续平稳。',
 }
 
 export const mockBehaviorHighlights: BehaviorInsight[] = [

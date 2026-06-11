@@ -21,11 +21,12 @@ const DIMENSION_LABELS: Record<BehaviorInsight['dimension'], string> = {
 }
 
 function HomePage() {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, isCheckingAuth } = useAuth()
   const isUnlocked = isAuthenticated
-  const [showLogin, setShowLogin] = useState(!isUnlocked)
+  const [showLogin, setShowLogin] = useState(!isUnlocked && !isCheckingAuth)
   const [highlights, setHighlights] = useState<BehaviorInsight[]>([])
   const [behaviorError, setBehaviorError] = useState<string | null>(null)
+  const [profilePrompt, setProfilePrompt] = useState(false)
 
   useEffect(() => {
     document.body.classList.toggle('home-locked', !isUnlocked)
@@ -33,8 +34,8 @@ function HomePage() {
   }, [isUnlocked])
 
   useEffect(() => {
-    setShowLogin(!isUnlocked)
-  }, [isUnlocked])
+    setShowLogin(!isUnlocked && !isCheckingAuth)
+  }, [isCheckingAuth, isUnlocked])
 
   useEffect(() => {
     if (!isUnlocked) {
@@ -66,8 +67,9 @@ function HomePage() {
     }
   }, [isUnlocked])
 
-  const handleAuthenticated = () => {
+  const handleAuthenticated = (mode: 'login' | 'register') => {
     setShowLogin(false)
+    setProfilePrompt(mode === 'register')
   }
 
   return (
@@ -107,6 +109,17 @@ function HomePage() {
                   <PillButton variant="outline">个人中心</PillButton>
                 </Link>
               </div>
+              {profilePrompt ? (
+                <section className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 rounded-[28px] border border-white/14 bg-black/26 px-5 py-4 text-white backdrop-blur-md">
+                  <div>
+                    <p className="text-sm font-semibold text-white">先补充你的真实资料</p>
+                    <p className="mt-1 text-xs text-white/56">新账号不会使用模板健康档案。补充资料后，AI 建议会更贴近你的实际情况。</p>
+                  </div>
+                  <Link to="/profile">
+                    <PillButton variant="color">去补充</PillButton>
+                  </Link>
+                </section>
+              ) : null}
             </>
           ) : null}
         </div>

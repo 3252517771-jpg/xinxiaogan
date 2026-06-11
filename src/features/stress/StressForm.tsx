@@ -3,7 +3,7 @@ import FieldInput from '@/components/ui/FieldInput'
 import PillButton from '@/components/ui/PillButton'
 import Toast from '@/components/ui/Toast'
 import { useMockSubmit } from '@/hooks/useMockSubmit'
-import type { StressRecord } from '@/types/health'
+import type { HealthMutationResponse, StressRecord } from '@/types/health'
 
 type EmotionTag = 'happy' | 'calm' | 'anxious' | 'tired' | 'irritable' | 'down' | 'nervous' | 'relaxed'
 
@@ -14,7 +14,7 @@ interface StressPayload {
 }
 
 interface StressFormProps {
-  onSubmitted?: (score: number) => void
+  onSubmitted?: (response: HealthMutationResponse<StressRecord>) => void
 }
 
 function StressForm({ onSubmitted }: StressFormProps) {
@@ -32,7 +32,7 @@ function StressForm({ onSubmitted }: StressFormProps) {
     })
 
     if (response) {
-      onSubmitted?.(response.score)
+      onSubmitted?.(response)
     }
   }
 

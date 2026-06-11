@@ -5,6 +5,7 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 from app.schemas.behavior import BehaviorInsight
+from app.schemas.risk import RiskRecordResponse
 
 
 MealType = Literal["breakfast", "lunch", "dinner", "snack"]
@@ -89,6 +90,7 @@ class SleepSubmitResponse(BaseModel):
     score: int
     record: SleepRecordResponse
     behavior_tags: list[BehaviorInsight] = []
+    ai_advice: str
 
 
 class DietSubmitResponse(BaseModel):
@@ -96,6 +98,7 @@ class DietSubmitResponse(BaseModel):
     score: int
     record: DietRecordResponse
     behavior_tags: list[BehaviorInsight] = []
+    ai_advice: str
 
 
 class ExerciseSubmitResponse(BaseModel):
@@ -103,6 +106,7 @@ class ExerciseSubmitResponse(BaseModel):
     score: int
     record: ExerciseRecordResponse
     behavior_tags: list[BehaviorInsight] = []
+    ai_advice: str
 
 
 class StressSubmitResponse(BaseModel):
@@ -110,3 +114,28 @@ class StressSubmitResponse(BaseModel):
     score: int
     record: StressRecordResponse
     behavior_tags: list[BehaviorInsight] = []
+    ai_advice: str
+
+
+class HealthHistoryItem(BaseModel):
+    id: str
+    dimension: Literal["sleep", "diet", "exercise", "stress", "risk"]
+    record_date: str
+    title: str
+    score: int
+    summary: str
+
+
+class HealthHistoryResponse(BaseModel):
+    ok: bool = True
+    count: int
+    items: list[HealthHistoryItem]
+
+
+class LatestHealthResponse(BaseModel):
+    ok: bool = True
+    sleep: SleepRecordResponse | None = None
+    diet: DietRecordResponse | None = None
+    exercise: ExerciseRecordResponse | None = None
+    stress: StressRecordResponse | None = None
+    risk: RiskRecordResponse | None = None

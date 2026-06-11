@@ -2,8 +2,12 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from dataclasses import dataclass
-from datetime import date
 
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.models.health import DietRecord, ExerciseRecord, SleepRecord, StressRecord
+from app.models.risk import RiskRecord
 from app.schemas.behavior import BehaviorDimension, BehaviorInsight, BehaviorTag
 
 
@@ -103,6 +107,9 @@ def detect_diet_behaviors(records: Sequence[dict]) -> list[BehaviorInsight]:
 
 def detect_exercise_behaviors(records: Sequence[dict]) -> list[BehaviorInsight]:
     recent = _sort_recent(records)[:7]
+    if not recent:
+        return []
+
     active_days = {record.get("record_date") for record in recent if (record.get("duration_min") or 0) > 0}
     if len(active_days) < 3:
         return [BehaviorInsight(**BEHAVIOR_RULES["sedentary"].__dict__)]
@@ -165,44 +172,73 @@ def detect_all_behaviors(
     return insights
 
 
-def build_mock_behavior_summary(today: date | None = None) -> list[BehaviorInsight]:
-    reference_day = today or date.today()
-    sleep_records = [
-        {"record_date": reference_day.isoformat(), "sleep_time": "01:35", "wake_time": "06:50"},
-        {"record_date": reference_day.replace(day=max(1, reference_day.day - 1)).isoformat(), "sleep_time": "01:20", "wake_time": "06:40"},
-        {"record_date": reference_day.replace(day=max(1, reference_day.day - 2)).isoformat(), "sleep_time": "01:10", "wake_time": "06:10"},
-    ]
-    diet_records = [
-        {"record_date": reference_day.isoformat(), "meal_type": "lunch"},
-        {"record_date": reference_day.isoformat(), "meal_type": "dinner"},
-        {"record_date": reference_day.replace(day=max(1, reference_day.day - 1)).isoformat(), "meal_type": "dinner"},
-        {"record_date": reference_day.replace(day=max(1, reference_day.day - 2)).isoformat(), "meal_type": "lunch"},
-    ]
-    exercise_records = [
-        {"record_date": reference_day.isoformat(), "duration_min": 0},
-        {"record_date": reference_day.replace(day=max(1, reference_day.day - 1)).isoformat(), "duration_min": 0},
-    ]
-    stress_records = [
-        {"record_date": reference_day.isoformat(), "stress_level": 8},
-        {"record_date": reference_day.replace(day=max(1, reference_day.day - 1)).isoformat(), "stress_level": 8},
-        {"record_date": reference_day.replace(day=max(1, reference_day.day - 2)).isoformat(), "stress_level": 7},
-    ]
-    risk_records = [
-        {
-            "record_date": reference_day.isoformat(),
-            "systolic_bp": 148,
-            "diastolic_bp": 96,
-            "heart_rate": 102,
-            "blood_glucose": 6.8,
-            "waist_cm": 93,
-            "cholesterol": 5.8,
-        }
-    ]
+async def build_behavior_summary(db: AsyncSession, user_id: str) -> list[BehaviorInsight]:
+    sleep_records = (
+        await db.scalars(
+            select(SleepRecord).where(SleepRecord.user_id == user_id).order_by(SleepRecord.record_date.desc()).limit(7)
+        )
+    ).all()
+    diet_records = (
+        await db.scalars(
+            select(DietRecord).where(DietRecord.user_id == user_id).order_by(DietRecord.record_date.desc()).limit(21)
+        )
+    ).all()
+    exercise_records = (
+        await db.scalars(
+            select(ExerciseRecord).where(ExerciseRecord.user_id == user_id).order_by(ExerciseRecord.record_date.desc()).limit(14)
+        )
+    ).all()
+    stress_records = (
+        await db.scalars(
+            select(StressRecord).where(StressRecord.user_id == user_id).order_by(StressRecord.record_date.desc()).limit(7)
+        )
+    ).all()
+    risk_records = (
+        await db.scalars(
+            select(RiskRecord).where(RiskRecord.user_id == user_id).order_by(RiskRecord.record_date.desc()).limit(7)
+        )
+    ).all()
 
     return detect_all_behaviors(
-        sleep_records=sleep_records,
-        diet_records=diet_records,
-        exercise_records=exercise_records,
-        stress_records=stress_records,
-        risk_records=risk_records,
+        sleep_records=[
+            {
+                "record_date": record.record_date.isoformat(),
+                "sleep_time": record.sleep_time,
+                "wake_time": record.wake_time,
+            }
+            for record in sleep_records
+        ],
+        diet_records=[
+            {
+                "record_date": record.record_date.isoformat(),
+                "meal_type": record.meal_type,
+            }
+            for record in diet_records
+        ],
+        exercise_records=[
+            {
+                "record_date": record.record_date.isoformat(),
+                "duration_min": record.duration_min,
+            }
+            for record in exercise_records
+        ],
+        stress_records=[
+            {
+                "record_date": record.record_date.isoformat(),
+                "stress_level": record.stress_level,
+            }
+            for record in stress_records
+        ],
+        risk_records=[
+            {
+                "record_date": record.record_date.isoformat(),
+                "systolic_bp": record.systolic_bp,
+                "diastolic_bp": record.diastolic_bp,
+                "heart_rate": record.heart_rate,
+                "blood_glucose": record.blood_glucose,
+                "waist_cm": record.waist_cm,
+                "cholesterol": record.cholesterol,
+            }
+            for record in risk_records
+        ],
     )

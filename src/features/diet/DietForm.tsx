@@ -3,7 +3,7 @@ import FieldInput from '@/components/ui/FieldInput'
 import PillButton from '@/components/ui/PillButton'
 import Toast from '@/components/ui/Toast'
 import { useMockSubmit } from '@/hooks/useMockSubmit'
-import type { DietRecord } from '@/types/health'
+import type { DietRecord, HealthMutationResponse } from '@/types/health'
 
 type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snack'
 
@@ -14,7 +14,7 @@ interface DietPayload {
 }
 
 interface DietFormProps {
-  onSubmitted?: (score: number) => void
+  onSubmitted?: (response: HealthMutationResponse<DietRecord>) => void
 }
 
 function DietForm({ onSubmitted }: DietFormProps) {
@@ -32,7 +32,7 @@ function DietForm({ onSubmitted }: DietFormProps) {
     })
 
     if (response) {
-      onSubmitted?.(response.score)
+      onSubmitted?.(response)
     }
   }
 

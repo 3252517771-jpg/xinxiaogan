@@ -3,7 +3,7 @@ import FieldInput from '@/components/ui/FieldInput'
 import PillButton from '@/components/ui/PillButton'
 import Toast from '@/components/ui/Toast'
 import { useMockSubmit } from '@/hooks/useMockSubmit'
-import type { ExerciseRecord } from '@/types/health'
+import type { ExerciseRecord, HealthMutationResponse } from '@/types/health'
 
 type ExerciseType = 'running' | 'walking' | 'cycling' | 'fitness' | 'ball' | 'other'
 type Intensity = 'low' | 'medium' | 'high'
@@ -17,7 +17,7 @@ interface ExercisePayload {
 }
 
 interface ExerciseFormProps {
-  onSubmitted?: (score: number) => void
+  onSubmitted?: (response: HealthMutationResponse<ExerciseRecord>) => void
 }
 
 function ExerciseForm({ onSubmitted }: ExerciseFormProps) {
@@ -39,7 +39,7 @@ function ExerciseForm({ onSubmitted }: ExerciseFormProps) {
     })
 
     if (response) {
-      onSubmitted?.(response.score)
+      onSubmitted?.(response)
     }
   }
 

@@ -8,8 +8,12 @@ interface AuthGuardProps {
 }
 
 function AuthGuard({ children }: AuthGuardProps) {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, isCheckingAuth } = useAuth()
   const location = useLocation()
+
+  if (isCheckingAuth) {
+    return null
+  }
 
   if (!isAuthenticated) {
     return <Navigate to={ROUTES.HOME} replace state={{ from: location.pathname }} />

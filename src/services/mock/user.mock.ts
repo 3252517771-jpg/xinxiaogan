@@ -17,4 +17,7 @@ export const mockUserProfile: UserProfile = {
   height_cm: null,
   weight_kg: null,
   timezone: 'Asia/Shanghai',
+  wechat_sendkey: null,
+  enable_ai_advice: true,
+  enable_push: false,
 }

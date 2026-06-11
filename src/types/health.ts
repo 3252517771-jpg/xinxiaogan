@@ -27,10 +27,36 @@ export interface HealthMutationResponse<TRecord> {
   score: number
   record: TRecord
   behavior_tags: BehaviorInsight[]
+  ai_advice: string
+}
+
+export interface HealthHistoryItem {
+  id: string
+  dimension: BehaviorDimension
+  record_date: string
+  title: string
+  score: number
+  summary: string
+}
+
+export interface HealthHistoryResponse {
+  ok: boolean
+  count: number
+  items: HealthHistoryItem[]
+}
+
+export interface LatestHealthResponse {
+  ok: boolean
+  sleep: SleepRecord | null
+  diet: DietRecord | null
+  exercise: ExerciseRecord | null
+  stress: StressRecord | null
+  risk: RiskRecord | null
 }
 
 export interface RiskMutationResponse extends HealthMutationResponse<RiskRecord>, RiskPrediction {
   behavior_tags: BehaviorInsight[]
+  ai_advice: string
 }
 
 export interface SleepRecord {

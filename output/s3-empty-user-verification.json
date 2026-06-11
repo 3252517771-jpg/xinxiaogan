@@ -1,0 +1,85 @@
+{
+  "username": "s3_empty_1781199519",
+  "profile_empty_fields": {
+    "age": null,
+    "gender": null,
+    "height_cm": null,
+    "weight_kg": null
+  },
+  "summary_before": {
+    "ok": true,
+    "count": 6,
+    "highlights": [
+      {
+        "id": "late_night",
+        "dimension": "sleep",
+        "label": "近期熬夜较多，注意调整作息哦"
+      },
+      {
+        "id": "short_sleep",
+        "dimension": "sleep",
+        "label": "睡眠时间偏短，争取早点休息"
+      },
+      {
+        "id": "meal_skip",
+        "dimension": "diet",
+        "label": "三餐记录不完整，记得按时吃饭"
+      },
+      {
+        "id": "sedentary",
+        "dimension": "exercise",
+        "label": "近期运动偏少，出门走走活动一下"
+      },
+      {
+        "id": "high_stress",
+        "dimension": "stress",
+        "label": "最近压力较大，记得适当放松"
+      },
+      {
+        "id": "abnormal_sign",
+        "dimension": "risk",
+        "label": "某项指标偏高，建议持续关注"
+      }
+    ]
+  },
+  "sleep_has_ai_advice": true,
+  "sleep_score": 92,
+  "sleep_record_user_id": "487466b8-2e2c-4dc8-b734-1f4b5ca6333f",
+  "summary_after": {
+    "ok": true,
+    "count": 6,
+    "highlights": [
+      {
+        "id": "late_night",
+        "dimension": "sleep",
+        "label": "近期熬夜较多，注意调整作息哦"
+      },
+      {
+        "id": "short_sleep",
+        "dimension": "sleep",
+        "label": "睡眠时间偏短，争取早点休息"
+      },
+      {
+        "id": "meal_skip",
+        "dimension": "diet",
+        "label": "三餐记录不完整，记得按时吃饭"
+      },
+      {
+        "id": "sedentary",
+        "dimension": "exercise",
+        "label": "近期运动偏少，出门走走活动一下"
+      },
+      {
+        "id": "high_stress",
+        "dimension": "stress",
+        "label": "最近压力较大，记得适当放松"
+      },
+      {
+        "id": "abnormal_sign",
+        "dimension": "risk",
+        "label": "某项指标偏高，建议持续关注"
+      }
+    ]
+  },
+  "passed": false
+}

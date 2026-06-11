@@ -2,15 +2,23 @@ import BackgroundLayer from '@/components/background/BackgroundLayer'
 import PageTransition from '@/components/transitions/PageTransition'
 import GlassCard from '@/components/ui/GlassCard'
 import PillButton from '@/components/ui/PillButton'
-import ScoreBadge from '@/components/ui/ScoreBadge'
 import ApiIntegration from '@/features/profile/ApiIntegration'
 import DataExport from '@/features/profile/DataExport'
 import HistoryList from '@/features/profile/HistoryList'
 import ProfileForm from '@/features/profile/ProfileForm'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ROUTES } from '@/config/routes'
+import { useAuth } from '@/hooks/useAuth'
 
 function ProfilePage() {
+  const { logout } = useAuth()
+  const navigate = useNavigate()
+
+  function handleLogout() {
+    logout()
+    navigate(ROUTES.HOME, { replace: true })
+  }
+
   return (
     <>
       <BackgroundLayer image="图一.png" />
@@ -26,12 +34,14 @@ function ProfilePage() {
               </p>
             </div>
             <div className="flex items-center gap-3 self-start">
-              <ScoreBadge label="综合" score={82} />
               <Link to={ROUTES.HOME}>
                 <PillButton className="border-black/10 text-forest-deep hover:border-black/18 hover:bg-black/5" variant="outline">
                   返回首页
                 </PillButton>
               </Link>
+              <PillButton className="border-black/10 text-forest-deep hover:border-black/18 hover:bg-black/5" onClick={handleLogout} variant="outline">
+                退出登录
+              </PillButton>
             </div>
           </header>
 
@@ -51,16 +61,16 @@ function ProfilePage() {
               <GlassCard title="当前档案摘要">
                 <div className="space-y-3 text-sm text-white/68">
                   <div className="flex items-center justify-between">
-                    <span>最近更新</span>
-                    <span>2026-06-11</span>
+                    <span>资料来源</span>
+                    <span>当前账号</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span>已记录维度</span>
-                    <span>5 / 5</span>
+                    <span>默认模板</span>
+                    <span>不启用</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span>导出状态</span>
-                    <span>Mock 可用</span>
+                    <span>健康记录</span>
+                    <span>录入后生成</span>
                   </div>
                 </div>
               </GlassCard>

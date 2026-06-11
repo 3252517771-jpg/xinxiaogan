@@ -21,6 +21,10 @@ class Settings(BaseSettings):
     ml_models_dir: str = Field(default="backend/ml_models")
     risk_model_filename: str = Field(default="risk_classifier.joblib")
     risk_scaler_filename: str = Field(default="risk_scaler.joblib")
+    deepseek_api_key: str = Field(default="")
+    deepseek_base_url: str = Field(default="https://api.deepseek.com")
+    deepseek_model: str = Field(default="deepseek-chat")
+    enable_ai_advice: bool = Field(default=True)
 
     model_config = SettingsConfigDict(
         env_file=".env",

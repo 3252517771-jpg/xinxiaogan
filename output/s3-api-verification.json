@@ -1,0 +1,99 @@
+{
+  "sleep": {
+    "ok": true,
+    "score": 29,
+    "record": {
+      "id": "9126e807-6673-43ef-a288-d5185a20999f",
+      "user_id": "3a583fc0-656c-40f4-bdf8-ae4c5389e74f",
+      "record_date": "2026-06-12",
+      "sleep_time": "01:20",
+      "wake_time": "07:10",
+      "sleep_quality": 3,
+      "interruption_count": 2,
+      "score": 29,
+      "notes": null
+    },
+    "behavior_tags": [],
+    "ai_advice": "试试睡前减少手机使用，固定起床时间，让身体慢慢适应早起节奏。中断时别着急，闭眼放松就好🌙"
+  },
+  "diet": {
+    "ok": true,
+    "score": 100,
+    "record": {
+      "id": "96564e03-23f8-4cce-b014-4f6ec96bc05d",
+      "user_id": "3a583fc0-656c-40f4-bdf8-ae4c5389e74f",
+      "record_date": "2026-06-12",
+      "meal_type": "dinner",
+      "food_description": "米饭 鸡胸肉 西兰花",
+      "calories": 720,
+      "score": 100
+    },
+    "behavior_tags": [],
+    "ai_advice": "今晚搭配不错哦！建议保持，试试把主食换成杂粮，能增加膳食纤维，对肝脏更友好🌾"
+  },
+  "exercise": {
+    "ok": true,
+    "score": 85,
+    "record": {
+      "id": "8725b22b-f59f-46d4-bab5-187133923f12",
+      "user_id": "3a583fc0-656c-40f4-bdf8-ae4c5389e74f",
+      "record_date": "2026-06-12",
+      "exercise_type": "walking",
+      "duration_min": 25,
+      "intensity": "medium",
+      "steps": 6800,
+      "heart_rate": 90,
+      "score": 85
+    },
+    "behavior_tags": [
+      {
+        "id": "sedentary",
+        "dimension": "exercise",
+        "label": "近期运动偏少，出门走走活动一下"
+      }
+    ],
+    "ai_advice": "最近运动偏少哦，建议每天出门散步15分钟，让身体活动一下，步数慢慢提上来就好🌱"
+  },
+  "stress": {
+    "ok": true,
+    "score": 26,
+    "record": {
+      "id": "8f322fc3-bd9d-4238-897c-f705cb24e774",
+      "user_id": "3a583fc0-656c-40f4-bdf8-ae4c5389e74f",
+      "record_date": "2026-06-12",
+      "stress_level": 7,
+      "anxiety_level": 6,
+      "emotion_tag": "anxious",
+      "score": 26
+    },
+    "behavior_tags": [],
+    "ai_advice": "最近压力有点大，试试每天睡前做5次深呼吸，慢慢吸气呼气，让身体放松下来🌿"
+  },
+  "risk": {
+    "ok": true,
+    "score": 0,
+    "record": {
+      "id": "fa30d157-61b0-4081-8461-66c586c537fb",
+      "user_id": "3a583fc0-656c-40f4-bdf8-ae4c5389e74f",
+      "record_date": "2026-06-12",
+      "systolic_bp": 148,
+      "diastolic_bp": 95,
+      "heart_rate": 101,
+      "blood_glucose": 6.8,
+      "waist_cm": 92.0,
+      "cholesterol": 5.9,
+      "score": 0
+    },
+    "risk_level": "high",
+    "risk_probability": 0.909,
+    "risk_alert": true,
+    "behavior_tags": [
+      {
+        "id": "abnormal_sign",
+        "dimension": "risk",
+        "label": "某项指标偏高，建议持续关注"
+      }
+    ],
+    "ai_advice": "最近血压和血糖偏高，建议减少高盐高糖食物，每天快走30分钟，下周再测一次看看变化哦😊"
+  }
+}

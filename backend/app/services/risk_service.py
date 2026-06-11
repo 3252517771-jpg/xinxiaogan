@@ -6,11 +6,19 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.risk import RiskRecord
-from app.models.user import User
+from app.models.user import User, UserProfile
 from app.schemas.risk import RiskCreateRequest, RiskRecordResponse, RiskSubmitResponse
+from app.services.ai_advice import generate_ai_advice
 from app.services.behavior import detect_risk_behaviors
 from app.services.risk_predictor import predict_risk
 from app.services.score_service import calc_risk_score
+
+
+async def _load_ai_enabled(db: AsyncSession, user_id: str) -> bool:
+    profile = await db.scalar(select(UserProfile).where(UserProfile.user_id == user_id))
+    if profile is None:
+        return True
+    return profile.enable_ai_advice
 
 
 def _to_record_response(record: RiskRecord) -> RiskRecordResponse:
@@ -35,8 +43,18 @@ async def submit_risk_record(
 ) -> RiskSubmitResponse:
     today = date.today()
     score = calc_risk_score(payload)
+    ai_enabled = await _load_ai_enabled(db, current_user.id)
     prediction = predict_risk(payload.model_dump())
     behavior_tags = detect_risk_behaviors([payload.model_dump() | {"record_date": today.isoformat()}])
+    ai_advice = await generate_ai_advice(
+        dimension="risk",
+        score=score,
+        behavior_tags=behavior_tags,
+        payload=payload.model_dump(),
+        enable_ai_advice=ai_enabled,
+        risk_level=prediction.risk_level,
+        risk_alert=prediction.risk_alert,
+    )
 
     existing_record = await db.scalar(
         select(RiskRecord).where(
@@ -78,4 +96,5 @@ async def submit_risk_record(
         risk_probability=prediction.risk_probability,
         risk_alert=prediction.risk_alert,
         behavior_tags=behavior_tags,
+        ai_advice=ai_advice,
     )

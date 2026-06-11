@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:api": "powershell -NoLogo -NoProfile -Command \"$env:VITE_USE_MOCK_API='false'; vite --host 127.0.0.1 --port 5174\"",
+    "dev:mock": "powershell -NoLogo -NoProfile -Command \"$env:VITE_USE_MOCK_API='true'; vite --host 127.0.0.1 --port 5175\"",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview"
   },

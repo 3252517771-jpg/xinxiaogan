@@ -5,7 +5,7 @@ import PillButton from '@/components/ui/PillButton'
 import { useAuth } from '@/hooks/useAuth'
 
 interface AuthModalProps {
-  onAuthenticated: () => void
+  onAuthenticated: (mode: AuthMode) => void
 }
 
 type AuthMode = 'login' | 'register'
@@ -33,7 +33,7 @@ function AuthModal({ onAuthenticated }: AuthModalProps) {
         await login({ username, password })
       }
 
-      onAuthenticated()
+      onAuthenticated(mode)
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : '认证失败，请稍后重试')
     } finally {

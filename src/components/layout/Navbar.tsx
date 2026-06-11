@@ -1,6 +1,5 @@
 import { ROUTES } from '@/config/routes'
 import SlimTag from '@/components/ui/SlimTag'
-import ScoreBadge from '@/components/ui/ScoreBadge'
 import PillNav from '@/components/layout/PillNav'
 
 interface NavbarProps {
@@ -26,10 +25,7 @@ function Navbar({ locked = false, onLoginClick }: NavbarProps) {
         {locked ? (
           <SlimTag active label="早上好，先登录" />
         ) : (
-          <>
-            <SlimTag active label="早上好" />
-            <ScoreBadge label="综合" score={82} />
-          </>
+          <SlimTag active label="早上好，记录从今天开始" />
         )}
       </div>
     </header>

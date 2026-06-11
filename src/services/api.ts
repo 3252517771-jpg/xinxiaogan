@@ -1,7 +1,7 @@
 import { mockRequest } from '@/services/mock/api.mock'
 
 const BASE_URL = import.meta.env.DEV ? '/api' : '/api'
-const USE_MOCK_API = import.meta.env.DEV && import.meta.env.VITE_USE_MOCK_API !== 'false'
+const USE_MOCK_API = import.meta.env.DEV && import.meta.env.VITE_USE_MOCK_API === 'true'
 
 export interface ApiResponse<T> {
   code: number
@@ -39,6 +39,14 @@ export async function request<T>(endpoint: string, options: RequestInit = {}): P
     } catch {
       message = errorText
     }
+
+    if (response.status === 401) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('xinxiaogan_username')
+      localStorage.removeItem('xinxiaogan_mock_token')
+      window.dispatchEvent(new CustomEvent('xinxiaogan:unauthorized'))
+    }
+
     throw new Error(message)
   }
 

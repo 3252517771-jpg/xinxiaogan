@@ -10,6 +10,7 @@ from app.database import dispose_engine, init_database, ping_database
 from app.routers.auth import router as auth_router
 from app.routers.behavior import router as behavior_router
 from app.routers.health import router as health_router
+from app.routers.user import router as user_router
 from app.services.risk_predictor import load_models
 
 
@@ -41,6 +42,7 @@ app.add_middleware(
 app.include_router(auth_router, prefix="/api")
 app.include_router(behavior_router, prefix="/api")
 app.include_router(health_router, prefix="/api")
+app.include_router(user_router, prefix="/api")
 
 
 @app.get("/health")
