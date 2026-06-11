@@ -1,6 +1,7 @@
 import type { LoginPayload, RegisterPayload, TokenResponse } from '@/services/auth'
 import type { UserProfile } from '@/types/user'
 import {
+  mockBehaviorSummary,
   getMockHistory,
   mockDailyScore,
   mockHealthRecords,
@@ -9,6 +10,7 @@ import {
   type HealthDimension,
 } from './health.mock'
 import { mockUser, mockUserProfile } from './user.mock'
+import { mockBehaviorHighlights } from './risk.mock'
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 
@@ -27,6 +29,7 @@ interface MutationResponse<T> {
   ok: boolean
   score: number
   record: T
+  behavior_tags: typeof mockBehaviorHighlights
 }
 
 const MOCK_DELAY_MS = 120
@@ -85,6 +88,7 @@ function mutateHealthRecord<T extends { id: string; score: number }>(
     ok: true,
     score: nextRecord.score,
     record: nextRecord,
+    behavior_tags: [],
   }
 }
 
@@ -129,10 +133,24 @@ export async function mockRequest<T>({ endpoint, method, body }: MockRequestInpu
             id: `${mockRiskMutationResponse.record.id}-submitted`,
             score: payload.systolic_bp && payload.systolic_bp >= 145 ? 58 : mockRiskMutationResponse.score,
           },
+          behavior_tags:
+            payload.systolic_bp && payload.systolic_bp >= 145
+              ? [
+                  {
+                    id: 'abnormal_sign',
+                    dimension: 'risk',
+                    label: '某项指标偏高，建议持续关注',
+                  },
+                ]
+              : [],
         } as T
       }
       return mutateHealthRecord(mockHealthRecords[dimension], body) as T
     }
+  }
+
+  if (path === '/behavior/summary' && method === 'GET') {
+    return mockBehaviorSummary as T
   }
 
   if (path === '/health/overall' && method === 'GET') {

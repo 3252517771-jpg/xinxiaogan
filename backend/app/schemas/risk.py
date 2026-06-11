@@ -2,6 +2,8 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+from app.schemas.behavior import BehaviorInsight
+
 
 RiskLevel = Literal["low", "medium", "high"]
 
@@ -41,3 +43,4 @@ class RiskSubmitResponse(BaseModel):
     risk_level: RiskLevel
     risk_probability: float = Field(ge=0.0, le=1.0)
     risk_alert: bool
+    behavior_tags: list[BehaviorInsight] = []

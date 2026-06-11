@@ -1,6 +1,20 @@
 import type { ScoreLevel } from '@/types/ip'
 
 export type RiskLevel = 'low' | 'medium' | 'high'
+export type BehaviorTag = 'late_night' | 'short_sleep' | 'meal_skip' | 'sedentary' | 'high_stress' | 'abnormal_sign'
+export type BehaviorDimension = 'sleep' | 'diet' | 'exercise' | 'stress' | 'risk'
+
+export interface BehaviorInsight {
+  id: BehaviorTag
+  dimension: BehaviorDimension
+  label: string
+}
+
+export interface BehaviorSummaryResponse {
+  ok: boolean
+  count: number
+  highlights: BehaviorInsight[]
+}
 
 export interface RiskPrediction {
   risk_level: RiskLevel
@@ -12,9 +26,12 @@ export interface HealthMutationResponse<TRecord> {
   ok: boolean
   score: number
   record: TRecord
+  behavior_tags: BehaviorInsight[]
 }
 
-export interface RiskMutationResponse extends HealthMutationResponse<RiskRecord>, RiskPrediction {}
+export interface RiskMutationResponse extends HealthMutationResponse<RiskRecord>, RiskPrediction {
+  behavior_tags: BehaviorInsight[]
+}
 
 export interface SleepRecord {
   id: string

@@ -1,0 +1,154 @@
+{
+  "ok": true,
+  "behavior_summary": {
+    "ok": true,
+    "count": 6,
+    "highlights": [
+      {
+        "id": "late_night",
+        "dimension": "sleep",
+        "label": "近期熬夜较多，注意调整作息哦"
+      },
+      {
+        "id": "short_sleep",
+        "dimension": "sleep",
+        "label": "睡眠时间偏短，争取早点休息"
+      },
+      {
+        "id": "meal_skip",
+        "dimension": "diet",
+        "label": "三餐记录不完整，记得按时吃饭"
+      },
+      {
+        "id": "sedentary",
+        "dimension": "exercise",
+        "label": "近期运动偏少，出门走走活动一下"
+      },
+      {
+        "id": "high_stress",
+        "dimension": "stress",
+        "label": "最近压力较大，记得适当放松"
+      },
+      {
+        "id": "abnormal_sign",
+        "dimension": "risk",
+        "label": "某项指标偏高，建议持续关注"
+      }
+    ]
+  },
+  "sleep_submit": {
+    "ok": true,
+    "score": 21,
+    "record": {
+      "id": "763505b7-9da3-4f9f-82ce-7c58eea08673",
+      "user_id": "e97aee98-af9c-4526-98fa-6dceddbc2182",
+      "record_date": "2026-06-12",
+      "sleep_time": "01:35",
+      "wake_time": "06:20",
+      "sleep_quality": 2,
+      "interruption_count": 2,
+      "score": 21,
+      "notes": null
+    },
+    "behavior_tags": [
+      {
+        "id": "late_night",
+        "dimension": "sleep",
+        "label": "近期熬夜较多，注意调整作息哦"
+      },
+      {
+        "id": "short_sleep",
+        "dimension": "sleep",
+        "label": "睡眠时间偏短，争取早点休息"
+      }
+    ]
+  },
+  "diet_submit": {
+    "ok": true,
+    "score": 55,
+    "record": {
+      "id": "51172c8e-cf26-4057-bc88-258c9fb606f3",
+      "user_id": "e97aee98-af9c-4526-98fa-6dceddbc2182",
+      "record_date": "2026-06-12",
+      "meal_type": "dinner",
+      "food_description": "面包和咖啡",
+      "calories": 180,
+      "score": 55
+    },
+    "behavior_tags": [
+      {
+        "id": "meal_skip",
+        "dimension": "diet",
+        "label": "三餐记录不完整，记得按时吃饭"
+      }
+    ]
+  },
+  "exercise_submit": {
+    "ok": true,
+    "score": 40,
+    "record": {
+      "id": "5c3a77ad-f03d-4a1e-84ba-5f9951cc99cf",
+      "user_id": "e97aee98-af9c-4526-98fa-6dceddbc2182",
+      "record_date": "2026-06-12",
+      "exercise_type": "walking",
+      "duration_min": 12,
+      "intensity": "low",
+      "steps": 1800,
+      "heart_rate": 82,
+      "score": 40
+    },
+    "behavior_tags": [
+      {
+        "id": "sedentary",
+        "dimension": "exercise",
+        "label": "近期运动偏少，出门走走活动一下"
+      }
+    ]
+  },
+  "stress_submit": {
+    "ok": true,
+    "score": 12,
+    "record": {
+      "id": "2230ad5b-b2eb-488e-b46d-0f80bd96b5a5",
+      "user_id": "e97aee98-af9c-4526-98fa-6dceddbc2182",
+      "record_date": "2026-06-12",
+      "stress_level": 8,
+      "anxiety_level": 8,
+      "emotion_tag": "anxious",
+      "score": 12
+    },
+    "behavior_tags": [
+      {
+        "id": "high_stress",
+        "dimension": "stress",
+        "label": "最近压力较大，记得适当放松"
+      }
+    ]
+  },
+  "risk_submit": {
+    "ok": true,
+    "score": 0,
+    "record": {
+      "id": "10b1acd1-1bb5-4dec-b9d7-d951204f3f9c",
+      "user_id": "e97aee98-af9c-4526-98fa-6dceddbc2182",
+      "record_date": "2026-06-12",
+      "systolic_bp": 148,
+      "diastolic_bp": 95,
+      "heart_rate": 104,
+      "blood_glucose": 6.9,
+      "waist_cm": 95.0,
+      "cholesterol": 5.9,
+      "score": 0
+    },
+    "risk_level": "high",
+    "risk_probability": 0.91,
+    "risk_alert": true,
+    "behavior_tags": [
+      {
+        "id": "abnormal_sign",
+        "dimension": "risk",
+        "label": "某项指标偏高，建议持续关注"
+      }
+    ]
+  }
+}

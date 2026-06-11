@@ -1,4 +1,4 @@
-import type { RiskMutationResponse, RiskRecord } from '@/types/health'
+import type { BehaviorInsight, RiskMutationResponse, RiskRecord } from '@/types/health'
 
 export const mockRiskRecord: RiskRecord = {
   id: 'mock-risk-1',
@@ -20,4 +20,23 @@ export const mockRiskPrediction: RiskMutationResponse = {
   risk_level: 'low',
   risk_probability: 0.912,
   risk_alert: false,
+  behavior_tags: [],
 }
+
+export const mockBehaviorHighlights: BehaviorInsight[] = [
+  {
+    id: 'late_night',
+    dimension: 'sleep',
+    label: '近期熬夜较多，注意调整作息哦',
+  },
+  {
+    id: 'sedentary',
+    dimension: 'exercise',
+    label: '近期运动偏少，出门走走活动一下',
+  },
+  {
+    id: 'high_stress',
+    dimension: 'stress',
+    label: '最近压力较大，记得适当放松',
+  },
+]

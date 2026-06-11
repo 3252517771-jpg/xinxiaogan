@@ -9,11 +9,23 @@ import ScoreTagline from '@/features/dashboard/ScoreTagline'
 import TrendSection from '@/features/dashboard/TrendSection'
 import PillButton from '@/components/ui/PillButton'
 import { useAuth } from '@/hooks/useAuth'
+import { request } from '@/services/api'
+import type { BehaviorInsight, BehaviorSummaryResponse } from '@/types/health'
+
+const DIMENSION_LABELS: Record<BehaviorInsight['dimension'], string> = {
+  sleep: '作息',
+  diet: '饮食',
+  exercise: '运动',
+  stress: '压力',
+  risk: '风险',
+}
 
 function HomePage() {
   const { isAuthenticated } = useAuth()
   const isUnlocked = isAuthenticated
   const [showLogin, setShowLogin] = useState(!isUnlocked)
+  const [highlights, setHighlights] = useState<BehaviorInsight[]>([])
+  const [behaviorError, setBehaviorError] = useState<string | null>(null)
 
   useEffect(() => {
     document.body.classList.toggle('home-locked', !isUnlocked)
@@ -22,6 +34,36 @@ function HomePage() {
 
   useEffect(() => {
     setShowLogin(!isUnlocked)
+  }, [isUnlocked])
+
+  useEffect(() => {
+    if (!isUnlocked) {
+      setHighlights([])
+      setBehaviorError(null)
+      return
+    }
+
+    let isMounted = true
+
+    async function loadHighlights() {
+      try {
+        const response = await request<BehaviorSummaryResponse>('/behavior/summary')
+        if (isMounted) {
+          setHighlights(response.highlights)
+          setBehaviorError(null)
+        }
+      } catch (requestError) {
+        if (isMounted) {
+          setBehaviorError(requestError instanceof Error ? requestError.message : '行为识别加载失败')
+        }
+      }
+    }
+
+    void loadHighlights()
+
+    return () => {
+      isMounted = false
+    }
   }, [isUnlocked])
 
   const handleAuthenticated = () => {
@@ -41,6 +83,25 @@ function HomePage() {
             <>
               <DimensionCardStack />
               <TrendSection />
+              <section
+                aria-label="行为识别标签"
+                className="mx-auto flex w-full max-w-5xl flex-wrap items-center gap-3 rounded-[28px] border border-black/18 bg-black/28 px-5 py-4 text-white backdrop-blur-md"
+              >
+                <span className="text-xs font-semibold uppercase tracking-[0.28em] text-white/56">behavior</span>
+                {behaviorError ? <span className="text-sm text-white/68">{behaviorError}</span> : null}
+                {!behaviorError && highlights.length === 0 ? <span className="text-sm text-white/68">最近状态平稳，暂时没有额外提醒。</span> : null}
+                {highlights.map((item) => (
+                  <span
+                    className="inline-flex min-h-11 items-center gap-3 rounded-pill border border-white/10 bg-black/42 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(0,0,0,0.18)]"
+                    key={item.id}
+                  >
+                    <span className="rounded-pill bg-white/12 px-2.5 py-1 text-[11px] uppercase tracking-[0.18em] text-white/72">
+                      {DIMENSION_LABELS[item.dimension]}
+                    </span>
+                    <span className="leading-5 text-white/92">{item.label}</span>
+                  </span>
+                ))}
+              </section>
               <div className="flex justify-center">
                 <Link to="/profile">
                   <PillButton variant="outline">个人中心</PillButton>
