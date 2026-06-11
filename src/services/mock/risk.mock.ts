@@ -1,4 +1,4 @@
-import type { RiskRecord } from '@/types/health'
+import type { RiskMutationResponse, RiskRecord } from '@/types/health'
 
 export const mockRiskRecord: RiskRecord = {
   id: 'mock-risk-1',
@@ -11,4 +11,13 @@ export const mockRiskRecord: RiskRecord = {
   waist_cm: 78,
   cholesterol: 4.6,
   score: 88,
+}
+
+export const mockRiskPrediction: RiskMutationResponse = {
+  ok: true,
+  score: mockRiskRecord.score,
+  record: mockRiskRecord,
+  risk_level: 'low',
+  risk_probability: 0.912,
+  risk_alert: false,
 }

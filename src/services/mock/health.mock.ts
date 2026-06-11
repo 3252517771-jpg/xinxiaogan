@@ -2,6 +2,7 @@ import type {
   DailyScore,
   DietRecord,
   ExerciseRecord,
+  RiskMutationResponse,
   RiskRecord,
   SleepRecord,
   StressRecord,
@@ -9,7 +10,7 @@ import type {
 import { getScoreLevel } from '@/utils/score'
 import { mockDietRecord } from './diet.mock'
 import { mockExerciseRecord } from './exercise.mock'
-import { mockRiskRecord } from './risk.mock'
+import { mockRiskPrediction, mockRiskRecord } from './risk.mock'
 import { mockSleepRecord } from './sleep.mock'
 import { mockStressRecord } from './stress.mock'
 
@@ -123,6 +124,8 @@ export const mockHealthRecords: Record<HealthDimension, HealthRecord> = {
   stress: mockStressRecord,
   risk: mockRiskRecord,
 }
+
+export const mockRiskMutationResponse: RiskMutationResponse = mockRiskPrediction
 
 export function getMockHistory(dimension: HealthDimension | 'all', page: number): HistoryPage {
   const pageSize = 10

@@ -15,4 +15,7 @@ export interface UserProfile {
   height_cm: number | null
   weight_kg: number | null
   timezone: string
+  wechat_sendkey?: string | null
+  enable_ai_advice?: boolean
+  enable_push?: boolean
 }

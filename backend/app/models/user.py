@@ -50,6 +50,9 @@ class UserProfile(Base):
     height_cm: Mapped[float | None] = mapped_column(nullable=True)
     weight_kg: Mapped[float | None] = mapped_column(nullable=True)
     timezone: Mapped[str] = mapped_column(String(50), nullable=False, default="Asia/Shanghai")
+    wechat_sendkey: Mapped[str | None] = mapped_column(nullable=True)
+    enable_ai_advice: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    enable_push: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

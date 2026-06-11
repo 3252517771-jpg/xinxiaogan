@@ -26,6 +26,12 @@ def _build_engine() -> AsyncEngine:
 engine = _build_engine()
 AsyncSessionLocal = async_sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
+SQLITE_USER_PROFILE_PATCHES = (
+    "ALTER TABLE user_profiles ADD COLUMN wechat_sendkey TEXT",
+    "ALTER TABLE user_profiles ADD COLUMN enable_ai_advice BOOLEAN NOT NULL DEFAULT 1",
+    "ALTER TABLE user_profiles ADD COLUMN enable_push BOOLEAN NOT NULL DEFAULT 0",
+)
+
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSessionLocal() as session:
@@ -51,6 +57,12 @@ async def ping_database() -> DatabasePing:
 async def init_database() -> None:
     async with engine.begin() as connection:
         await connection.run_sync(Base.metadata.create_all)
+        if engine.url.get_backend_name() == "sqlite":
+            result = await connection.execute(text("PRAGMA table_info(user_profiles)"))
+            existing_columns = {row[1] for row in result.fetchall()}
+            if "wechat_sendkey" not in existing_columns:
+                for statement in SQLITE_USER_PROFILE_PATCHES:
+                    await connection.execute(text(statement))
 
 
 async def dispose_engine() -> None:

@@ -1,11 +1,6 @@
 import { useState } from 'react'
 import { request } from '@/services/api'
-
-interface MutationResponse<T> {
-  ok: boolean
-  score: number
-  record: T
-}
+import type { HealthMutationResponse } from '@/types/health'
 
 export function useMockSubmit<TPayload extends object, TRecord extends object>(endpoint: string) {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -18,7 +13,7 @@ export function useMockSubmit<TPayload extends object, TRecord extends object>(e
     setError(null)
 
     try {
-      const response = await request<MutationResponse<TRecord>>(endpoint, {
+      const response = await request<HealthMutationResponse<TRecord>>(endpoint, {
         method: 'POST',
         body: JSON.stringify(payload),
       })

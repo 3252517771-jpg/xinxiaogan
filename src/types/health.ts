@@ -1,5 +1,21 @@
 import type { ScoreLevel } from '@/types/ip'
 
+export type RiskLevel = 'low' | 'medium' | 'high'
+
+export interface RiskPrediction {
+  risk_level: RiskLevel
+  risk_probability: number
+  risk_alert: boolean
+}
+
+export interface HealthMutationResponse<TRecord> {
+  ok: boolean
+  score: number
+  record: TRecord
+}
+
+export interface RiskMutationResponse extends HealthMutationResponse<RiskRecord>, RiskPrediction {}
+
 export interface SleepRecord {
   id: string
   user_id: string

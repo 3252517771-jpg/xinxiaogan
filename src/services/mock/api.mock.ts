@@ -4,6 +4,7 @@ import {
   getMockHistory,
   mockDailyScore,
   mockHealthRecords,
+  mockRiskMutationResponse,
   mockTrendPoints,
   type HealthDimension,
 } from './health.mock'
@@ -111,6 +112,25 @@ export async function mockRequest<T>({ endpoint, method, body }: MockRequestInpu
     }
 
     if (isHealthDimension(dimension) && method === 'POST') {
+      if (dimension === 'risk') {
+        const payload = readPayload<typeof mockRiskMutationResponse.record>(body)
+        return {
+          ...mockRiskMutationResponse,
+          score:
+            payload.systolic_bp && payload.systolic_bp >= 145
+              ? 58
+              : mockRiskMutationResponse.score,
+          risk_level: payload.systolic_bp && payload.systolic_bp >= 145 ? 'high' : 'low',
+          risk_probability: payload.systolic_bp && payload.systolic_bp >= 145 ? 0.873 : 0.912,
+          risk_alert: Boolean(payload.systolic_bp && payload.systolic_bp >= 145),
+          record: {
+            ...mockRiskMutationResponse.record,
+            ...payload,
+            id: `${mockRiskMutationResponse.record.id}-submitted`,
+            score: payload.systolic_bp && payload.systolic_bp >= 145 ? 58 : mockRiskMutationResponse.score,
+          },
+        } as T
+      }
       return mutateHealthRecord(mockHealthRecords[dimension], body) as T
     }
   }

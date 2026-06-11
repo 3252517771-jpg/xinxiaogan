@@ -11,9 +11,15 @@ import RiskRadarPanel from '@/features/risk/RiskRadarPanel'
 import RiskSummary from '@/features/risk/RiskSummary'
 import RiskTrend from '@/features/risk/RiskTrend'
 import { useVideoState } from '@/hooks/useVideoState'
+import type { RiskPrediction } from '@/types/health'
 
 function RiskPage() {
   const [score, setScore] = useState(88)
+  const [prediction, setPrediction] = useState<RiskPrediction | null>({
+    risk_level: 'low',
+    risk_probability: 0.912,
+    risk_alert: false,
+  })
   const { scene, triggerFeedback, handleVideoEnded } = useVideoState('risk', score)
 
   return (
@@ -28,8 +34,13 @@ function RiskPage() {
               <TiltedPanel caption="体征数据录入" minHeight="470px">
                 <GlassCard title="体征数据录入">
                   <HealthForm
-                    onSubmitted={(nextScore) => {
-                      setScore(nextScore)
+                    onSubmitted={(result) => {
+                      setScore(result.score)
+                      setPrediction({
+                        risk_level: result.risk_level,
+                        risk_probability: result.risk_probability,
+                        risk_alert: result.risk_alert,
+                      })
                       triggerFeedback()
                     }}
                   />
@@ -46,7 +57,7 @@ function RiskPage() {
                 <RiskTrend />
               </TiltedPanel>
               <TiltedPanel caption="风险分析摘要" minHeight="240px">
-                <RiskSummary />
+                <RiskSummary prediction={prediction} />
               </TiltedPanel>
             </>
           }

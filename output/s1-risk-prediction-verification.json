@@ -1,0 +1,67 @@
+{
+  "milestone": "S1",
+  "title": "ML 风险预测（真实公开数据集训练）",
+  "verified_at": "2026-06-11 23:33:20",
+  "dataset_source": "CDC NHANES 2017-2018 official public dataset",
+  "dataset_files": [
+    "BPX_J.XPT",
+    "BMX_J.XPT",
+    "GLU_J.XPT",
+    "TCHOL_J.XPT",
+    "MCQ_J.XPT"
+  ],
+  "environment": {
+    "backend_python": "A:\\python1\\Scripts\\conda.exe run -p D:\\conda-envs\\claude-code",
+    "database": "SQLite",
+    "backend_health": {
+      "status": "ok",
+      "service": "xinxiaogan-backend"
+    },
+    "database_ping": {
+      "ok": true,
+      "result": 1,
+      "database_url_driver": "sqlite+aiosqlite"
+    }
+  },
+  "artifacts": {
+    "trained_model": "backend/ml_models/risk_classifier.joblib",
+    "trained_scaler": "backend/ml_models/risk_scaler.joblib",
+    "processed_dataset": "backend/datasets/processed/risk_training_dataset.csv"
+  },
+  "checks": [
+    {
+      "name": "normal-risk-sample",
+      "request": {
+        "systolic_bp": 110,
+        "diastolic_bp": 72,
+        "heart_rate": 68,
+        "blood_glucose": 5.0,
+        "waist_cm": 76.0,
+        "cholesterol": 4.2
+      },
+      "response": {
+        "score": 100,
+        "risk_level": "low",
+        "risk_probability": 0.977,
+        "risk_alert": false
+      }
+    },
+    {
+      "name": "high-risk-sample",
+      "request": {
+        "systolic_bp": 156,
+        "diastolic_bp": 97,
+        "heart_rate": 104,
+        "blood_glucose": 8.1,
+        "waist_cm": 102.0,
+        "cholesterol": 6.5
+      },
+      "response": {
+        "score": 0,
+        "risk_level": "high",
+        "risk_probability": 0.989,
+        "risk_alert": true
+      }
+    }
+  ]
+}

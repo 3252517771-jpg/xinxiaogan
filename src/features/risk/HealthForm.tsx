@@ -2,20 +2,11 @@ import { useState } from 'react'
 import FieldInput from '@/components/ui/FieldInput'
 import PillButton from '@/components/ui/PillButton'
 import Toast from '@/components/ui/Toast'
-import { useMockSubmit } from '@/hooks/useMockSubmit'
-import type { RiskRecord } from '@/types/health'
-
-interface RiskPayload {
-  systolic_bp: number
-  diastolic_bp: number
-  heart_rate: number
-  blood_glucose: number
-  waist_cm: number
-  cholesterol: number
-}
+import { request } from '@/services/api'
+import type { RiskMutationResponse } from '@/types/health'
 
 interface HealthFormProps {
-  onSubmitted?: (score: number) => void
+  onSubmitted?: (result: RiskMutationResponse) => void
 }
 
 function HealthForm({ onSubmitted }: HealthFormProps) {
@@ -25,21 +16,35 @@ function HealthForm({ onSubmitted }: HealthFormProps) {
   const [bloodGlucose, setBloodGlucose] = useState(5.2)
   const [waistCm, setWaistCm] = useState(78)
   const [cholesterol, setCholesterol] = useState(4.6)
-  const { isSubmitting, message, error, submit } = useMockSubmit<RiskPayload, RiskRecord>('/health/risk')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [message, setMessage] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    const response = await submit({
-      systolic_bp: systolicBp,
-      diastolic_bp: diastolicBp,
-      heart_rate: heartRate,
-      blood_glucose: bloodGlucose,
-      waist_cm: waistCm,
-      cholesterol,
-    })
+    setIsSubmitting(true)
+    setMessage(null)
+    setError(null)
 
-    if (response) {
-      onSubmitted?.(response.score)
+    try {
+      const response = await request<RiskMutationResponse>('/health/risk', {
+        method: 'POST',
+        body: JSON.stringify({
+          systolic_bp: systolicBp,
+          diastolic_bp: diastolicBp,
+          heart_rate: heartRate,
+          blood_glucose: bloodGlucose,
+          waist_cm: waistCm,
+          cholesterol,
+        }),
+      })
+      setMessage(`已记录，当前评分 ${response.score}`)
+      onSubmitted?.(response)
+    } catch (submitError) {
+      const nextError = submitError instanceof Error ? submitError.message : '提交失败'
+      setError(nextError)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 

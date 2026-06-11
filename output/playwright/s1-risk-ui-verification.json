@@ -1,0 +1,6 @@
+{
+  "page": "/health-risk",
+  "screenshot": "D:\\xinxiaogan\\output\\playwright\\s1-risk-high-alert.png",
+  "expected_summary_text": "高风险预警",
+  "found": 1
+}
