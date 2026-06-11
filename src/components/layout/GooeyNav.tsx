@@ -1,21 +1,43 @@
-import { NavLink } from 'react-router-dom'
-import { DETAIL_ROUTES } from '@/config/routes'
+import { useLocation, useNavigate } from 'react-router-dom'
+import Dock from '@/components/react-bits/Dock'
+import { DETAIL_ROUTES, type HealthDimension } from '@/config/routes'
+
+const DETAIL_LABELS: Record<HealthDimension, string> = {
+  sleep: '作息',
+  diet: '饮食',
+  exercise: '运动',
+  stress: '压力',
+  risk: '风险',
+}
+
+const DETAIL_ICONS: Record<HealthDimension, string> = {
+  sleep: '息',
+  diet: '食',
+  exercise: '动',
+  stress: '压',
+  risk: '险',
+}
 
 function GooeyNav() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const items = DETAIL_ROUTES.map((route) => {
+    const isActive = route.path === location.pathname
+    const label = route.dimension ? DETAIL_LABELS[route.dimension] : route.label
+    const icon = route.dimension ? DETAIL_ICONS[route.dimension] : label.slice(0, 1)
+
+    return {
+      className: isActive ? 'is-active' : '',
+      icon: <span>{icon}</span>,
+      label,
+      onClick: () => navigate(route.path),
+    }
+  })
+
   return (
-    <nav className="fixed bottom-8 left-1/2 z-10 flex -translate-x-1/2 gap-2 rounded-pill border border-white/14 bg-white/10 px-4 py-3 text-sm text-white shadow-[0_18px_48px_rgba(0,0,0,0.24)] backdrop-blur-xl">
-      {DETAIL_ROUTES.map((route) => (
-        <NavLink
-          className={({ isActive }) =>
-            `rounded-pill px-4 py-2 transition ${isActive ? 'bg-white text-forest-deep shadow-[0_10px_24px_rgba(255,255,255,0.16)]' : 'text-white/65 hover:bg-white/10 hover:text-white'}`
-          }
-          key={route.path}
-          to={route.path}
-        >
-          {route.label}
-        </NavLink>
-      ))}
-    </nav>
+    <div className="fixed bottom-6 left-1/2 z-10 -translate-x-1/2">
+      <Dock baseItemSize={48} dockHeight={120} items={items} magnification={66} panelHeight={64} />
+    </div>
   )
 }
 

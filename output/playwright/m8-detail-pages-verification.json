@@ -1,0 +1,96 @@
+{
+  "generatedAt": "2026-06-11T09:54:00+08:00",
+  "viewport": "1920x1080",
+  "sourceDocs": [
+    "项目立项文档.md 5.3-5.7",
+    "docs/前端技术方案与实施计划.md Sprint 3",
+    "docs/后端技术方案.md 4.3, 6",
+    "docs/数据库设计.md 3.3-3.7"
+  ],
+  "build": {
+    "command": "npm run build",
+    "passed": true,
+    "note": "tsc --noEmit and vite build passed; Vite chunk size warning remains known and non-blocking."
+  },
+  "reactBits": {
+    "source": "React Bits repository TS-Tailwind components, manually integrated per docs/前端技术方案与实施计划.md section 9",
+    "components": [
+      {
+        "name": "MagicBento",
+        "file": "src/components/react-bits/MagicBento.tsx",
+        "usedBy": ["src/components/layout/MagicBentoLayout.tsx", "src/pages/SleepPage.tsx", "src/pages/ExercisePage.tsx"],
+        "evidence": "renders data-react-bits=\"MagicBento\" and keeps GSAP spotlight, particles, border glow, ripple interactions"
+      },
+      {
+        "name": "Dock",
+        "file": "src/components/react-bits/Dock.tsx",
+        "usedBy": ["src/components/layout/GooeyNav.tsx", "all five detail pages"],
+        "evidence": "renders data-react-bits=\"Dock\" and provides bottom detail-page navigation with magnification effect"
+      },
+      {
+        "name": "TiltedCard",
+        "file": "src/components/react-bits/TiltedCard.tsx",
+        "usedBy": ["src/components/layout/TiltedPanel.tsx", "src/pages/DietPage.tsx", "src/pages/StressPage.tsx", "src/pages/RiskPage.tsx"],
+        "evidence": "renders data-react-bits=\"TiltedCard\" around diet, stress, and risk page panels"
+      }
+    ]
+  },
+  "humanAcceptance": {
+    "acceptedBy": "小洋裙",
+    "acceptedAt": "2026-06-11 09:54",
+    "note": "用户确认运动页卡片宽度调整后可以了。"
+  },
+  "results": [
+    {
+      "key": "sleep",
+      "path": "/sleep",
+      "expectedLayout": "MagicBento 右侧数据面板",
+      "reactBitsComponent": "MagicBento",
+      "fields": ["入睡时间", "起床时间", "睡眠质量", "中断次数"],
+      "submitFeedback": "已记录，当前评分 83",
+      "screenshot": "output/playwright/m8-sleep-detail.png",
+      "passed": true
+    },
+    {
+      "key": "diet",
+      "path": "/diet",
+      "expectedLayout": "左 1/4 推荐+录入，中 1/2 龙猫场景留白，右 1/4 营养摘要",
+      "reactBitsComponent": "Dock + TiltedCard",
+      "fields": ["餐次", "食物描述", "热量"],
+      "submitFeedback": "已记录，当前评分 75",
+      "screenshot": "output/playwright/m8-diet-detail.png",
+      "passed": true
+    },
+    {
+      "key": "exercise",
+      "path": "/exercise",
+      "expectedLayout": "MagicBento 左侧数据面板，宽度与作息页一致",
+      "reactBitsComponent": "MagicBento",
+      "fields": ["运动类型", "时长", "强度", "步数", "心率"],
+      "submitFeedback": "已记录，当前评分 80",
+      "screenshot": "output/playwright/m8-exercise-detail.png",
+      "passed": true
+    },
+    {
+      "key": "stress",
+      "path": "/stress",
+      "expectedLayout": "左 1/4 压力录入+摘要，中 1/2 无翼鸟场景留白，右 1/4 建议+趋势",
+      "reactBitsComponent": "Dock + TiltedCard",
+      "fields": ["压力自评", "焦虑自评", "情绪标签"],
+      "submitFeedback": "已记录，当前评分 86",
+      "screenshot": "output/playwright/m8-stress-detail.png",
+      "passed": true
+    },
+    {
+      "key": "risk",
+      "path": "/health-risk",
+      "expectedLayout": "左 1/4 体征录入+风险雷达，中 1/2 两脚兽场景留白，右 1/4 风险趋势+摘要",
+      "reactBitsComponent": "Dock + TiltedCard",
+      "fields": ["收缩压", "舒张压", "静息心率", "血糖值", "腰围", "胆固醇"],
+      "submitFeedback": "已记录，当前评分 88",
+      "screenshot": "output/playwright/m8-risk-detail.png",
+      "passed": true
+    }
+  ],
+  "passed": true
+}
