@@ -3,7 +3,6 @@ import GooeyNav from '@/components/layout/GooeyNav'
 import Navbar from '@/components/layout/Navbar'
 import PageHeader from '@/components/layout/PageHeader'
 import PageTransition from '@/components/transitions/PageTransition'
-import IPVideoPlayer from '@/components/ip/IPVideoPlayer'
 import GlassCard from '@/components/ui/GlassCard'
 import DietForm from '@/features/diet/DietForm'
 import DietSummary from '@/features/diet/DietSummary'
@@ -21,10 +20,7 @@ function DietPage() {
           <GlassCard title="饮食录入">
             <DietForm />
           </GlassCard>
-          <div className="space-y-6">
-            <DietSummary />
-            <IPVideoPlayer ipId="diet" score={75} />
-          </div>
+          <DietSummary />
         </div>
       </PageTransition>
       <GooeyNav />

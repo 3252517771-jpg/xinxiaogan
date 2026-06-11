@@ -1,0 +1,115 @@
+{
+  "checkedAt": "2026-06-11T00:01:01.744Z",
+  "runner": "vite.ssrLoadModule(/src/services/api.ts)",
+  "allPassed": true,
+  "endpoints": [
+    {
+      "method": "POST",
+      "endpoint": "/auth/register",
+      "ok": true,
+      "shape": "access_token,token_type,username"
+    },
+    {
+      "method": "POST",
+      "endpoint": "/auth/login",
+      "ok": true,
+      "shape": "access_token,token_type,username"
+    },
+    {
+      "method": "GET",
+      "endpoint": "/health/sleep?date=2026-06-10",
+      "ok": true,
+      "shape": "id,interruption_count,record_date,score,sleep_quality,sleep_time,user_id,wake_time"
+    },
+    {
+      "method": "POST",
+      "endpoint": "/health/sleep",
+      "ok": true,
+      "shape": "ok,record,score"
+    },
+    {
+      "method": "GET",
+      "endpoint": "/health/diet?date=2026-06-10",
+      "ok": true,
+      "shape": "calories,food_description,id,meal_type,record_date,score,user_id"
+    },
+    {
+      "method": "POST",
+      "endpoint": "/health/diet",
+      "ok": true,
+      "shape": "ok,record,score"
+    },
+    {
+      "method": "GET",
+      "endpoint": "/health/exercise?date=2026-06-10",
+      "ok": true,
+      "shape": "duration_min,exercise_type,heart_rate,id,intensity,record_date,score,steps,user_id"
+    },
+    {
+      "method": "POST",
+      "endpoint": "/health/exercise",
+      "ok": true,
+      "shape": "ok,record,score"
+    },
+    {
+      "method": "GET",
+      "endpoint": "/health/stress?date=2026-06-10",
+      "ok": true,
+      "shape": "anxiety_level,emotion_tag,id,record_date,score,stress_level,user_id"
+    },
+    {
+      "method": "POST",
+      "endpoint": "/health/stress",
+      "ok": true,
+      "shape": "ok,record,score"
+    },
+    {
+      "method": "GET",
+      "endpoint": "/health/risk?date=2026-06-10",
+      "ok": true,
+      "shape": "blood_glucose,cholesterol,diastolic_bp,heart_rate,id,record_date,score,systolic_bp,user_id,waist_cm"
+    },
+    {
+      "method": "POST",
+      "endpoint": "/health/risk",
+      "ok": true,
+      "shape": "ok,record,score"
+    },
+    {
+      "method": "GET",
+      "endpoint": "/health/overall?date=2026-06-10",
+      "ok": true,
+      "shape": "diet_score,exercise_score,id,overall_score,risk_score,score_date,score_level,sleep_score,stress_score,user_id"
+    },
+    {
+      "method": "GET",
+      "endpoint": "/health/trend?dimension=all&days=7",
+      "ok": true,
+      "shape": "array:7"
+    },
+    {
+      "method": "GET",
+      "endpoint": "/user/profile",
+      "ok": true,
+      "shape": "age,gender,height_cm,id,nickname,timezone,user_id,weight_kg"
+    },
+    {
+      "method": "PUT",
+      "endpoint": "/user/profile",
+      "ok": true,
+      "shape": "age,gender,height_cm,id,nickname,timezone,user_id,weight_kg"
+    },
+    {
+      "method": "GET",
+      "endpoint": "/health/history?dimension=sleep&page=1",
+      "ok": true,
+      "shape": "items,page,page_size,total"
+    },
+    {
+      "method": "POST",
+      "endpoint": "/admin/verify",
+      "ok": true,
+      "shape": "mode,ok"
+    }
+  ]
+}

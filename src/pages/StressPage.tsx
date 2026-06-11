@@ -3,7 +3,6 @@ import GooeyNav from '@/components/layout/GooeyNav'
 import Navbar from '@/components/layout/Navbar'
 import PageHeader from '@/components/layout/PageHeader'
 import PageTransition from '@/components/transitions/PageTransition'
-import IPVideoPlayer from '@/components/ip/IPVideoPlayer'
 import GlassCard from '@/components/ui/GlassCard'
 import StressAdvice from '@/features/stress/StressAdvice'
 import StressForm from '@/features/stress/StressForm'
@@ -26,7 +25,7 @@ function StressPage() {
             <StressAdvice />
             <StressTrend />
           </div>
-          <IPVideoPlayer ipId="stress" score={86} />
+          <div aria-hidden="true" data-layout-zone="ip-scene-space" />
         </div>
       </PageTransition>
       <GooeyNav />

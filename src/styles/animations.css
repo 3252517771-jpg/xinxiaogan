@@ -10,7 +10,11 @@
   animation: fade-rise 520ms var(--ease-out) both;
 }
 
-.scroll-stack-card {
+.split-text-word {
+  animation: split-word-rise 720ms var(--ease-out) both;
+}
+
+.dashboard-card-entry {
   animation: fade-rise 480ms var(--ease-out) both;
 }
 
@@ -68,5 +72,17 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes split-word-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.72em) rotate(1.5deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
   }
 }

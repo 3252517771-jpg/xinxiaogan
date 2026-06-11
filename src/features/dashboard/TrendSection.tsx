@@ -19,7 +19,7 @@ function TrendSection() {
   const [active, setActive] = useState<string>('overall')
 
   return (
-    <GlassCard className="border-glow max-w-5xl" eyebrow="trend" title="近 7 天综合趋势">
+    <GlassCard className="border-glow mx-auto w-full max-w-5xl" eyebrow="trend" title="近 7 天综合趋势">
       <div className="mb-4 flex gap-2">
         {dimensions.map((dimension) => (
           <button key={dimension.key} onClick={() => setActive(dimension.key)} type="button">

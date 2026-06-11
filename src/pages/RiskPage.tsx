@@ -3,7 +3,6 @@ import GooeyNav from '@/components/layout/GooeyNav'
 import Navbar from '@/components/layout/Navbar'
 import PageHeader from '@/components/layout/PageHeader'
 import PageTransition from '@/components/transitions/PageTransition'
-import IPVideoPlayer from '@/components/ip/IPVideoPlayer'
 import GlassCard from '@/components/ui/GlassCard'
 import HealthForm from '@/features/risk/HealthForm'
 import RiskRadarPanel from '@/features/risk/RiskRadarPanel'
@@ -27,7 +26,6 @@ function RiskPage() {
           </div>
           <div className="space-y-6">
             <RiskSummary />
-            <IPVideoPlayer ipId="risk" score={88} />
           </div>
         </div>
       </PageTransition>

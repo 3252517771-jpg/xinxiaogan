@@ -5,14 +5,34 @@ interface ScoreTaglineProps {
 }
 
 function ScoreTagline({ locked = false }: ScoreTaglineProps) {
+  const titleLines = [
+    ['The', 'forest'],
+    ['knows', 'your'],
+    ['health.'],
+  ]
+  let wordIndex = 0
+
   return (
-    <section className="split-text-in max-w-2xl text-white drop-shadow-[0_16px_40px_rgba(0,0,0,0.45)]">
+    <section className="max-w-[980px] text-left text-white drop-shadow-[0_18px_42px_rgba(0,0,0,0.5)]">
       <div className="mb-5 flex items-center gap-3">
         <ScoreBadge label="综合" score={82} />
-        <span className="text-xs uppercase tracking-[0.2em] text-white/50">Your health, the forest knows.</span>
+        <span className="split-text-word text-xs uppercase tracking-[0.34em] text-white/58">Your health, the forest knows.</span>
       </div>
-      <h1 className="text-6xl font-semibold leading-tight text-white">The forest knows your health.</h1>
-      <p className="mt-5 max-w-xl text-base leading-7 text-white/78">
+      <h1 className="font-serif text-[clamp(76px,7.4vw,142px)] font-black leading-[0.88] text-white">
+        {titleLines.map((line) => (
+          <span className="block overflow-hidden py-1" key={line.join('-')}>
+            {line.map((word) => {
+              wordIndex += 1
+              return (
+                <span className="split-text-word inline-block pr-[0.22em]" key={word} style={{ animationDelay: `${wordIndex * 80}ms` }}>
+                  {word}
+                </span>
+              )
+            })}
+          </span>
+        ))}
+      </h1>
+      <p className="split-text-word mt-7 max-w-2xl text-lg font-semibold leading-8 text-white/84" style={{ animationDelay: '560ms' }}>
         {locked ? '登录后，小心肝会展开五个健康维度、近 7 天趋势和详情页入口。' : '小心肝把作息、饮食、运动、压力和风险装进同一片森林，今天的综合状态正在稳定发光。'}
       </p>
     </section>

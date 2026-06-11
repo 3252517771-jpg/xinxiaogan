@@ -1,0 +1,49 @@
+.scroll-stack-scroller {
+  position: relative;
+  width: min(920px, 100%);
+  height: 680px;
+  overflow-x: visible;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  transform: translateZ(0);
+  will-change: scroll-position;
+  scrollbar-width: none;
+}
+
+.home-scroll-stack {
+  height: 690px;
+  overflow-x: visible;
+  overflow-y: auto;
+}
+
+.scroll-stack-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-stack-inner {
+  min-height: 100%;
+  padding: 80px 72px 520px;
+}
+
+.scroll-stack-card {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 188px;
+  margin: 0;
+  transform-origin: top center;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, filter;
+}
+
+.scroll-stack-card > button,
+.scroll-stack-card > a {
+  width: 100%;
+}
+
+.scroll-stack-end {
+  width: 100%;
+  height: 1px;
+}

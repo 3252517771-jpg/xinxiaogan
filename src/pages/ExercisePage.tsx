@@ -3,7 +3,6 @@ import GooeyNav from '@/components/layout/GooeyNav'
 import Navbar from '@/components/layout/Navbar'
 import PageHeader from '@/components/layout/PageHeader'
 import PageTransition from '@/components/transitions/PageTransition'
-import IPVideoPlayer from '@/components/ip/IPVideoPlayer'
 import GlassCard from '@/components/ui/GlassCard'
 import ExerciseForm from '@/features/exercise/ExerciseForm'
 import ExerciseSummary from '@/features/exercise/ExerciseSummary'
@@ -16,15 +15,15 @@ function ExercisePage() {
       <Navbar />
       <PageTransition>
         <PageHeader score={80} title="运动分析" />
-        <div className="grid grid-cols-[1fr_360px] gap-6">
-          <div className="space-y-6">
+        <div className="grid grid-cols-[minmax(0,520px)_1fr] gap-6">
+          <div className="space-y-6" data-layout-zone="exercise-data">
             <GlassCard title="运动录入">
               <ExerciseForm />
             </GlassCard>
             <ExerciseSummary />
             <ExerciseTrend />
           </div>
-          <IPVideoPlayer ipId="exercise" score={80} />
+          <div aria-hidden="true" data-layout-zone="ip-scene-space" />
         </div>
       </PageTransition>
       <GooeyNav />

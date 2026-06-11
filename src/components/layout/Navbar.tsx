@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom'
 import { ROUTES } from '@/config/routes'
 import SlimTag from '@/components/ui/SlimTag'
 import ScoreBadge from '@/components/ui/ScoreBadge'
+import PillNav from '@/components/layout/PillNav'
 
 interface NavbarProps {
   locked?: boolean
@@ -9,10 +9,20 @@ interface NavbarProps {
 }
 
 function Navbar({ locked = false, onLoginClick }: NavbarProps) {
+  const items = locked
+    ? [
+        { label: '首页', href: ROUTES.HOME },
+        { label: '登录', href: ROUTES.HOME, ariaLabel: '打开登录', onClick: onLoginClick },
+      ]
+    : [
+        { label: '首页', href: ROUTES.HOME },
+        { label: '个人主页', href: ROUTES.PROFILE },
+      ]
+
   return (
-    <nav className="glass-edge fixed left-8 right-8 top-6 z-10 flex h-14 items-center justify-between rounded-pill border border-white/14 bg-white/10 px-6 text-white shadow-[0_18px_48px_rgba(0,0,0,0.22)] backdrop-blur-xl">
-      <Link className="text-sm font-semibold tracking-wide" to={ROUTES.HOME}>小心肝</Link>
-      <div className="flex items-center gap-2">
+    <header className="fixed left-0 right-0 top-0 z-20 pointer-events-none">
+      <PillNav className="pointer-events-auto" items={items} />
+      <div className="pointer-events-auto absolute left-1/2 top-24 flex -translate-x-1/2 items-center gap-2">
         {locked ? (
           <SlimTag active label="早上好，先登录" />
         ) : (
@@ -22,20 +32,7 @@ function Navbar({ locked = false, onLoginClick }: NavbarProps) {
           </>
         )}
       </div>
-      {locked ? (
-        <button
-          className="rounded-pill border border-white/18 px-3 py-1 text-xs text-white/72 transition hover:bg-white/10 hover:text-white"
-          onClick={onLoginClick}
-          type="button"
-        >
-          登录
-        </button>
-      ) : (
-        <Link className="rounded-pill border border-white/18 px-3 py-1 text-xs text-white/72 transition hover:bg-white/10 hover:text-white" to={ROUTES.PROFILE}>
-          个人主页
-        </Link>
-      )}
-    </nav>
+    </header>
   )
 }
 
