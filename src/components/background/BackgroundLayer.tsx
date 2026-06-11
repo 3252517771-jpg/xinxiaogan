@@ -9,9 +9,10 @@ interface BackgroundLayerProps {
   onSceneEnded?: (state: VideoScene['state']) => void
 }
 
-function BackgroundLayer({ image = '首页图.png', video, scene, onSceneEnded }: BackgroundLayerProps) {
+function BackgroundLayer({ image = '棣栭〉鍥?png', video, scene, onSceneEnded }: BackgroundLayerProps) {
   const [activeVideoSrc, setActiveVideoSrc] = useState<string | null>(scene?.source ?? (video ? assetUrl(video) : null))
   const videoRef = useRef<HTMLVideoElement | null>(null)
+  const replayTimeoutRef = useRef<number | null>(null)
 
   useEffect(() => {
     if (scene?.source) {
@@ -28,11 +29,24 @@ function BackgroundLayer({ image = '首页图.png', video, scene, onSceneEnded }
       return
     }
 
+    if (replayTimeoutRef.current) {
+      window.clearTimeout(replayTimeoutRef.current)
+      replayTimeoutRef.current = null
+    }
+
     node.loop = scene?.loop ?? true
     node.currentTime = 0
 
     void node.play().catch(() => {})
   }, [activeVideoSrc, scene?.loop])
+
+  useEffect(() => {
+    return () => {
+      if (replayTimeoutRef.current) {
+        window.clearTimeout(replayTimeoutRef.current)
+      }
+    }
+  }, [])
 
   const poster = scene?.poster ?? assetUrl(image)
   const videoClassName = scene?.filterClassName
@@ -58,7 +72,26 @@ function BackgroundLayer({ image = '首页图.png', video, scene, onSceneEnded }
               }
             }
 
-            if (scene && !scene.freezeOnEnd) {
+            if (scene?.cycleDurationMs && !scene.freezeOnEnd) {
+              const node = videoRef.current
+              if (node) {
+                const durationMs = Number.isFinite(node.duration) ? node.duration * 1000 : 0
+                const waitMs = Math.max(0, scene.cycleDurationMs - durationMs)
+
+                replayTimeoutRef.current = window.setTimeout(() => {
+                  const replayNode = videoRef.current
+                  if (!replayNode) {
+                    return
+                  }
+
+                  replayNode.currentTime = 0
+                  void replayNode.play().catch(() => {})
+                  replayTimeoutRef.current = null
+                }, waitMs)
+              }
+            }
+
+            if (scene && !scene.freezeOnEnd && !scene.cycleDurationMs) {
               onSceneEnded?.(scene.state)
             }
           }}

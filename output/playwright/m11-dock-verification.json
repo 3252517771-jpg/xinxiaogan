@@ -1,0 +1,81 @@
+{
+  "checkedAt": "2026-06-11T13:37:00.006Z",
+  "baseUrl": "http://127.0.0.1:4173",
+  "pages": {
+    "sleep": {
+      "dockVisible": true,
+      "dockItemCount": 5,
+      "activeIndex": [
+        0
+      ],
+      "pathname": "/sleep",
+      "header": "作息分析"
+    },
+    "diet": {
+      "dockVisible": true,
+      "dockItemCount": 5,
+      "activeIndex": [
+        1
+      ],
+      "pathname": "/diet",
+      "header": "饮食分析"
+    },
+    "exercise": {
+      "dockVisible": true,
+      "dockItemCount": 5,
+      "activeIndex": [
+        2
+      ],
+      "pathname": "/exercise",
+      "header": "运动分析"
+    },
+    "stress": {
+      "dockVisible": true,
+      "dockItemCount": 5,
+      "activeIndex": [
+        3
+      ],
+      "pathname": "/stress",
+      "header": "压力分析"
+    },
+    "risk": {
+      "dockVisible": true,
+      "dockItemCount": 5,
+      "activeIndex": [
+        4
+      ],
+      "pathname": "/health-risk",
+      "header": "健康风险"
+    }
+  },
+  "routeSwitches": [
+    {
+      "target": "diet",
+      "pathname": "/diet",
+      "activeCount": 1,
+      "activeLabelVisible": true,
+      "header": "饮食分析"
+    },
+    {
+      "target": "exercise",
+      "pathname": "/exercise",
+      "activeCount": 1,
+      "activeLabelVisible": true,
+      "header": "运动分析"
+    },
+    {
+      "target": "stress",
+      "pathname": "/stress",
+      "activeCount": 1,
+      "activeLabelVisible": true,
+      "header": "压力分析"
+    },
+    {
+      "target": "risk",
+      "pathname": "/health-risk",
+      "activeCount": 1,
+      "activeLabelVisible": true,
+      "header": "健康风险"
+    }
+  ]
+}

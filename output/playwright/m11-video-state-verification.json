@@ -1,0 +1,34 @@
+{
+  "checkedAt": "2026-06-11T13:54:55.948Z",
+  "cycleDurationTargetMs": 10000,
+  "sleepGood": {
+    "src": "/assets/S-01.mp4",
+    "currentSrc": "http://127.0.0.1:4173/assets/S-01.mp4",
+    "loop": false
+  },
+  "dietCalm": {
+    "src": "/assets/D-01.mp4",
+    "currentSrc": "http://127.0.0.1:4173/assets/D-01.mp4",
+    "loop": false,
+    "className": "h-full w-full object-cover transition-all duration-300 ip-video--calm"
+  },
+  "sleepFeedback": {
+    "src": "/assets/S-04.mp4",
+    "currentSrc": "http://127.0.0.1:4173/assets/S-04.mp4",
+    "loop": false
+  },
+  "syntheticBad": {
+    "src": "/assets/S-03.mp4",
+    "currentSrc": "http://127.0.0.1:4173/assets/S-03.mp4",
+    "loop": false
+  },
+  "assertions": {
+    "sleepGoodUsesS01": true,
+    "dietCalmUsesD01": true,
+    "dietCalmFilterApplied": true,
+    "sleepFeedbackUsesS04": true,
+    "syntheticBadUsesS03": true,
+    "loopDisabledForTimedCycle": true,
+    "loopDisabledForBadAndFeedback": true
+  }
+}

@@ -20,5 +20,6 @@ export interface VideoScene {
   poster: string
   loop: boolean
   freezeOnEnd: boolean
+  cycleDurationMs?: number
   filterClassName?: string
 }

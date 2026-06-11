@@ -22,6 +22,8 @@ function resolveScoreState(score: number): VideoState {
   return 'bad'
 }
 
+const LOOP_PLAYBACK_CYCLE_MS = 10000
+
 export function useVideoState(ipId: string, score: number): VideoStateController {
   const fallbackIp = IP_CHARACTERS.sleep
   if (!fallbackIp) {
@@ -65,8 +67,9 @@ export function useVideoState(ipId: string, score: number): VideoStateController
       state: activeState,
       source: assetUrl(ip.goodVideo),
       poster,
-      loop: true,
+      loop: false,
       freezeOnEnd: false,
+      cycleDurationMs: LOOP_PLAYBACK_CYCLE_MS,
       filterClassName: activeState === 'calm' ? 'ip-video--calm' : undefined,
     }
   }, [activeState, ip.badVideo, ip.feedbackVideo, ip.goodVideo, ip.sceneImage])
