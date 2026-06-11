@@ -1,0 +1,14 @@
+{
+  "milestone": "M6",
+  "requirement": "FastAPI + SQLite 开发数据库启动，第一条 SQL 可通过",
+  "checked_at": "2026-06-11T08:44:55",
+  "database_url_driver": "sqlite+aiosqlite",
+  "app_import_ok": true,
+  "sql": "SELECT 1",
+  "passed": true,
+  "database_ping": {
+    "ok": true,
+    "result": 1,
+    "database_url_driver": "sqlite+aiosqlite"
+  }
+}

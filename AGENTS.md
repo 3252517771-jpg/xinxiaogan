@@ -12,6 +12,7 @@
 |------|------|
 | 项目名 | 小心肝（XiaoXinGan） |
 | 技术栈 | React 18 + TS + Vite / Tailwind 3.4 / Python FastAPI / PostgreSQL |
+| 后端Python环境 | Conda `D:\conda-envs\claude-code`（通过 `A:\python1\Scripts\conda.exe run -p D:\conda-envs\claude-code ...` 执行） |
 | 动画引擎 | GSAP + React Bits（二者互补，不互替） |
 | 部署 | 阿里云 ECS + 七牛云 CDN |
 | 素材路径 | `A:\网站素材\图片\|视频\` → 七牛云外链 |
@@ -33,6 +34,16 @@
 ### 原则2：前端优先，Mock先行
 
 第一期**不给后端写真实业务逻辑**。API 层只返回 mock 数据，后端只跑通注册/登录/JWT。真实 API 替换＝只改 `BASE_URL`。
+
+### 原则2.1：后端固定 Conda 环境
+
+后端 Python 命令必须优先使用 Conda 环境 `D:\conda-envs\claude-code`，不要直接调用系统 `python` 或 base 环境。统一命令格式：
+
+```powershell
+& 'A:\python1\Scripts\conda.exe' run -p 'D:\conda-envs\claude-code' python ...
+```
+
+如后端依赖缺失，先在该环境内执行 `python -m pip install -r backend\requirements.txt`，再运行验证。
 
 ### 原则3：一文件一职责
 
@@ -117,7 +128,7 @@
 1. **能跑吗？** → `npm run dev` 无报错，`tsc --noEmit` 通过
 2. **符合规范吗？** → 目录放对了吗？命名规范了吗？引用正确的类型了吗？
 3. **引用文档了吗？** → 是否参照 `项目立项文档.md` / `前端技术方案与实施计划.md` / `数据库设计.md` 中的定义？不要凭记忆写代码。
-4. **证据链完善吗？** → 是否有足量证据证明确实实现业务流程？
+4. **人工验收通过了吗？** → 是否已把验证流程推送给人工确认？人工验收是否通过？
 
 ### 提交前 3 不提交
 

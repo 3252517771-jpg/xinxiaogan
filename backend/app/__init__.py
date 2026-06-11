@@ -1,0 +1,1 @@
+"""XiaoXinGan backend application package."""

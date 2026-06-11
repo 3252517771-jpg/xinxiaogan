@@ -1,0 +1,32 @@
+from functools import lru_cache
+from pathlib import Path
+
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+BACKEND_DIR = Path(__file__).resolve().parents[1]
+DEFAULT_SQLITE_URL = f"sqlite+aiosqlite:///{(BACKEND_DIR / 'dev.db').as_posix()}"
+
+
+class Settings(BaseSettings):
+    app_name: str = Field(default="小心肝")
+    app_version: str = Field(default="0.1.0")
+    debug: bool = Field(default=True)
+    database_url: str = Field(default=DEFAULT_SQLITE_URL)
+    cors_origins: str = Field(default="http://localhost:5173,http://localhost:3000")
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+    @property
+    def cors_origin_list(self) -> list[str]:
+        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+
+
+@lru_cache
+def get_settings() -> Settings:
+    return Settings()
