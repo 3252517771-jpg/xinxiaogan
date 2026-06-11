@@ -1,8 +1,9 @@
-import { useNavigate } from 'react-router-dom'
 import MergedShape from '@/components/ui/MergedShape'
 import ScrollStack, { ScrollStackItem } from '@/components/ui/ScrollStack'
+import { IP_CHARACTERS } from '@/config/constants'
 import { DETAIL_ROUTES } from '@/config/routes'
 import type { HealthDimension } from '@/config/routes'
+import { useTransitionStore } from '@/store/transitionStore'
 
 const DIMENSION_ACCENTS: Record<HealthDimension, string> = {
   sleep: '#A8D8FF',
@@ -21,7 +22,8 @@ const DIMENSION_STATUS: Record<HealthDimension, { status: string; score: number;
 }
 
 function DimensionCardStack() {
-  const navigate = useNavigate()
+  const { queueTransition } = useTransitionStore()
+  const fallbackTransitionVideo = IP_CHARACTERS.sleep?.transitionVideo ?? 'T-01.mp4'
 
   return (
     <section aria-label="ScrollStack 健康维度卡片" className="flex justify-center">
@@ -39,6 +41,7 @@ function DimensionCardStack() {
         {DETAIL_ROUTES.map((route, index) => {
           const dimension: HealthDimension = route.dimension ?? 'exercise'
           const detail = DIMENSION_STATUS[dimension]
+          const transitionVideo = IP_CHARACTERS[dimension]?.transitionVideo ?? fallbackTransitionVideo
 
           return (
             <ScrollStackItem key={route.path}>
@@ -48,10 +51,12 @@ function DimensionCardStack() {
                 onKeyDown={(event) => {
                   if (event.key === 'Enter' || event.key === ' ') {
                     event.preventDefault()
-                    navigate(route.path)
+                    queueTransition({ video: transitionVideo, targetPath: route.path })
                   }
                 }}
-                onClick={() => navigate(route.path)}
+                onClick={() => {
+                  queueTransition({ video: transitionVideo, targetPath: route.path })
+                }}
                 style={{ animationDelay: `${index * 90}ms` }}
                 type="button"
               >

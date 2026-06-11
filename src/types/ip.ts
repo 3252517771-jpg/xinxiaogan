@@ -13,3 +13,12 @@ export interface IPCharacter {
 
 export type VideoState = 'loading' | 'good' | 'calm' | 'bad' | 'feedback'
 export type ScoreLevel = 'excellent' | 'good' | 'average' | 'poor'
+
+export interface VideoScene {
+  state: VideoState
+  source: string
+  poster: string
+  loop: boolean
+  freezeOnEnd: boolean
+  filterClassName?: string
+}

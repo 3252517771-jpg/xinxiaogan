@@ -13,19 +13,27 @@ interface StressPayload {
   emotion_tag: EmotionTag
 }
 
-function StressForm() {
+interface StressFormProps {
+  onSubmitted?: (score: number) => void
+}
+
+function StressForm({ onSubmitted }: StressFormProps) {
   const [stressLevel, setStressLevel] = useState(4)
   const [anxietyLevel, setAnxietyLevel] = useState(3)
   const [emotionTag, setEmotionTag] = useState<EmotionTag>('calm')
   const { isSubmitting, message, error, submit } = useMockSubmit<StressPayload, StressRecord>('/health/stress')
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    void submit({
+    const response = await submit({
       stress_level: stressLevel,
       anxiety_level: anxietyLevel,
       emotion_tag: emotionTag,
     })
+
+    if (response) {
+      onSubmitted?.(response.score)
+    }
   }
 
   return (

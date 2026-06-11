@@ -14,7 +14,11 @@ interface RiskPayload {
   cholesterol: number
 }
 
-function HealthForm() {
+interface HealthFormProps {
+  onSubmitted?: (score: number) => void
+}
+
+function HealthForm({ onSubmitted }: HealthFormProps) {
   const [systolicBp, setSystolicBp] = useState(118)
   const [diastolicBp, setDiastolicBp] = useState(76)
   const [heartRate, setHeartRate] = useState(72)
@@ -23,9 +27,9 @@ function HealthForm() {
   const [cholesterol, setCholesterol] = useState(4.6)
   const { isSubmitting, message, error, submit } = useMockSubmit<RiskPayload, RiskRecord>('/health/risk')
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    void submit({
+    const response = await submit({
       systolic_bp: systolicBp,
       diastolic_bp: diastolicBp,
       heart_rate: heartRate,
@@ -33,6 +37,10 @@ function HealthForm() {
       waist_cm: waistCm,
       cholesterol,
     })
+
+    if (response) {
+      onSubmitted?.(response.score)
+    }
   }
 
   return (

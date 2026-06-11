@@ -16,7 +16,11 @@ interface ExercisePayload {
   heart_rate: number
 }
 
-function ExerciseForm() {
+interface ExerciseFormProps {
+  onSubmitted?: (score: number) => void
+}
+
+function ExerciseForm({ onSubmitted }: ExerciseFormProps) {
   const [exerciseType, setExerciseType] = useState<ExerciseType>('walking')
   const [durationMin, setDurationMin] = useState(35)
   const [intensity, setIntensity] = useState<Intensity>('medium')
@@ -24,15 +28,19 @@ function ExerciseForm() {
   const [heartRate, setHeartRate] = useState(92)
   const { isSubmitting, message, error, submit } = useMockSubmit<ExercisePayload, ExerciseRecord>('/health/exercise')
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    void submit({
+    const response = await submit({
       exercise_type: exerciseType,
       duration_min: durationMin,
       intensity,
       steps,
       heart_rate: heartRate,
     })
+
+    if (response) {
+      onSubmitted?.(response.score)
+    }
   }
 
   return (

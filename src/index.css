@@ -63,3 +63,21 @@ select {
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
   background-size: 48px 48px;
 }
+
+.ip-video--calm {
+  filter: brightness(0.85) saturate(0.7);
+}
+
+.scene-transition-layer {
+  animation: scene-fade 320ms var(--ease-out);
+}
+
+@keyframes scene-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

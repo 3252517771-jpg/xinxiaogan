@@ -30,7 +30,13 @@ function GooeyNav() {
       className: isActive ? 'is-active' : '',
       icon: <span>{icon}</span>,
       label,
-      onClick: () => navigate(route.path),
+      onClick: () => {
+        if (route.path === location.pathname) {
+          return
+        }
+
+        navigate(route.path)
+      },
     }
   })
 

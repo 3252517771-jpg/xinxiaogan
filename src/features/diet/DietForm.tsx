@@ -13,19 +13,27 @@ interface DietPayload {
   calories: number
 }
 
-function DietForm() {
+interface DietFormProps {
+  onSubmitted?: (score: number) => void
+}
+
+function DietForm({ onSubmitted }: DietFormProps) {
   const [mealType, setMealType] = useState<MealType>('lunch')
   const [foodDescription, setFoodDescription] = useState('米饭、鸡胸肉、青菜')
   const [calories, setCalories] = useState(680)
   const { isSubmitting, message, error, submit } = useMockSubmit<DietPayload, DietRecord>('/health/diet')
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    void submit({
+    const response = await submit({
       meal_type: mealType,
       food_description: foodDescription,
       calories,
     })
+
+    if (response) {
+      onSubmitted?.(response.score)
+    }
   }
 
   return (

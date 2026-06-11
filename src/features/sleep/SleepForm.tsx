@@ -13,21 +13,29 @@ interface SleepPayload {
   interruption_count: number
 }
 
-function SleepForm() {
+interface SleepFormProps {
+  onSubmitted?: (score: number) => void
+}
+
+function SleepForm({ onSubmitted }: SleepFormProps) {
   const [sleepTime, setSleepTime] = useState('23:00')
   const [wakeTime, setWakeTime] = useState('07:30')
   const [sleepQuality, setSleepQuality] = useState(4)
   const [interruptionCount, setInterruptionCount] = useState(1)
   const { isSubmitting, message, error, submit } = useMockSubmit<SleepPayload, SleepRecord>('/health/sleep')
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    void submit({
+    const response = await submit({
       sleep_time: sleepTime,
       wake_time: wakeTime,
       sleep_quality: sleepQuality,
       interruption_count: interruptionCount,
     })
+
+    if (response) {
+      onSubmitted?.(response.score)
+    }
   }
 
   return (

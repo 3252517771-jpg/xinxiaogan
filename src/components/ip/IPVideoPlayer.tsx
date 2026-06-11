@@ -8,15 +8,24 @@ interface IPVideoPlayerProps {
 }
 
 function IPVideoPlayer({ ipId, score }: IPVideoPlayerProps) {
-  const { currentSrc, state } = useVideoState(ipId, score)
+  const { scene, activeState, handleVideoEnded } = useVideoState(ipId, score)
 
   return (
     <GlassCard eyebrow="ip state" title="角色状态机" tone="medium">
       <div className="mb-4 flex items-center justify-between">
-        <span className="rounded-pill border border-white/14 px-3 py-1 text-xs text-white/62">{state}</span>
+        <span className="rounded-pill border border-white/14 px-3 py-1 text-xs text-white/62">{activeState}</span>
         <ScoreBadge label={ipId} score={score} />
       </div>
-      <video className="aspect-video w-full rounded-glass border border-white/12 object-cover" muted loop playsInline src={currentSrc} />
+      <video
+        autoPlay
+        className={`aspect-video w-full rounded-glass border border-white/12 object-cover ${scene.filterClassName ?? ''}`.trim()}
+        loop={scene.loop}
+        muted
+        onEnded={handleVideoEnded}
+        playsInline
+        poster={scene.poster}
+        src={scene.source}
+      />
     </GlassCard>
   )
 }
