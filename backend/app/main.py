@@ -6,11 +6,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.config import get_settings
-from app.database import dispose_engine, ping_database
+from app.database import dispose_engine, init_database, ping_database
+from app.routers.auth import router as auth_router
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    await init_database()
     yield
     await dispose_engine()
 
@@ -31,6 +33,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(auth_router, prefix="/api")
 
 
 @app.get("/health")

@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     debug: bool = Field(default=True)
     database_url: str = Field(default=DEFAULT_SQLITE_URL)
     cors_origins: str = Field(default="http://localhost:5173,http://localhost:3000")
+    secret_key: str = Field(default="dev-xinxiaogan-secret-key-change-before-deploy")
+    jwt_algorithm: str = Field(default="HS256")
+    access_token_expire_minutes: int = Field(default=1440)
 
     model_config = SettingsConfigDict(
         env_file=".env",

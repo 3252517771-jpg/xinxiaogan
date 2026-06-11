@@ -8,9 +8,11 @@ import DimensionCardStack from '@/features/dashboard/DimensionCardStack'
 import ScoreTagline from '@/features/dashboard/ScoreTagline'
 import TrendSection from '@/features/dashboard/TrendSection'
 import PillButton from '@/components/ui/PillButton'
+import { useAuth } from '@/hooks/useAuth'
 
 function HomePage() {
-  const [isUnlocked, setIsUnlocked] = useState(() => localStorage.getItem('xinxiaogan_mock_token') === 'm4')
+  const { isAuthenticated } = useAuth()
+  const isUnlocked = isAuthenticated
   const [showLogin, setShowLogin] = useState(!isUnlocked)
 
   useEffect(() => {
@@ -18,9 +20,11 @@ function HomePage() {
     return () => document.body.classList.remove('home-locked')
   }, [isUnlocked])
 
-  const handleLogin = () => {
-    localStorage.setItem('xinxiaogan_mock_token', 'm4')
-    setIsUnlocked(true)
+  useEffect(() => {
+    setShowLogin(!isUnlocked)
+  }, [isUnlocked])
+
+  const handleAuthenticated = () => {
     setShowLogin(false)
   }
 
@@ -46,7 +50,7 @@ function HomePage() {
           ) : null}
         </div>
       </PageTransition>
-      {showLogin ? <AuthModal onLogin={handleLogin} /> : null}
+      {showLogin ? <AuthModal onAuthenticated={handleAuthenticated} /> : null}
     </>
   )
 }

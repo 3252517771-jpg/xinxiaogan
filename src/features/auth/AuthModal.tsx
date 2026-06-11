@@ -2,13 +2,17 @@ import { useState } from 'react'
 import GlassCard from '@/components/ui/GlassCard'
 import FieldInput from '@/components/ui/FieldInput'
 import PillButton from '@/components/ui/PillButton'
-import { login } from '@/services/auth'
+import { useAuth } from '@/hooks/useAuth'
 
 interface AuthModalProps {
-  onLogin: () => void
+  onAuthenticated: () => void
 }
 
-function AuthModal({ onLogin }: AuthModalProps) {
+type AuthMode = 'login' | 'register'
+
+function AuthModal({ onAuthenticated }: AuthModalProps) {
+  const { login, register } = useAuth()
+  const [mode, setMode] = useState<AuthMode>('login')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -19,13 +23,19 @@ function AuthModal({ onLogin }: AuthModalProps) {
 
     try {
       const formData = new FormData(event.currentTarget)
-      const username = String(formData.get('username') ?? 'xiaoyangqun')
+      const username = String(formData.get('username') ?? '').trim()
       const password = String(formData.get('password') ?? '')
-      const token = await login({ username, password })
-      localStorage.setItem('token', token.access_token)
-      onLogin()
+
+      if (mode === 'register') {
+        const confirmPassword = String(formData.get('confirm_password') ?? '')
+        await register({ username, password, confirm_password: confirmPassword })
+      } else {
+        await login({ username, password })
+      }
+
+      onAuthenticated()
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : '登录失败，请稍后重试')
+      setError(submitError instanceof Error ? submitError.message : '认证失败，请稍后重试')
     } finally {
       setIsSubmitting(false)
     }
@@ -34,21 +44,39 @@ function AuthModal({ onLogin }: AuthModalProps) {
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-forest-deep/58 px-6 backdrop-blur-sm">
       <div className="w-[420px] fade-scale-in">
-        <GlassCard eyebrow="XiaoXinGan" title="登录">
+        <GlassCard eyebrow="XiaoXinGan" title={mode === 'login' ? '登录' : '注册'}>
           <form className="space-y-4" onSubmit={handleSubmit}>
-            <FieldInput autoComplete="username" label="用户名" name="username" placeholder="xiaoyangqun" />
+            <FieldInput autoComplete="username" label="用户名" name="username" placeholder="至少 3 位用户名" />
             <FieldInput
-              autoComplete="current-password"
+              autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
               label="密码"
               name="password"
-              placeholder="输入任意密码体验 Mock API"
+              placeholder="至少 6 位密码"
               type="password"
             />
+            {mode === 'register' ? (
+              <FieldInput
+                autoComplete="new-password"
+                label="确认密码"
+                name="confirm_password"
+                placeholder="再次输入密码"
+                type="password"
+              />
+            ) : null}
             {error ? <p className="text-sm text-red-200">{error}</p> : null}
             <PillButton className="w-full" disabled={isSubmitting} type="submit">
-              {isSubmitting ? '登录中...' : '登录'}
+              {isSubmitting ? '处理中...' : mode === 'login' ? '登录' : '注册并登录'}
             </PillButton>
-            <p className="text-center text-xs text-white/45">M5 使用 Mock API 返回 token，完整 JWT 鉴权流程留到 M7。</p>
+            <button
+              className="w-full text-center text-xs text-white/55 transition hover:text-white"
+              type="button"
+              onClick={() => {
+                setError(null)
+                setMode((currentMode) => (currentMode === 'login' ? 'register' : 'login'))
+              }}
+            >
+              {mode === 'login' ? '还没有账号？注册' : '已有账号？返回登录'}
+            </button>
           </form>
         </GlassCard>
       </div>

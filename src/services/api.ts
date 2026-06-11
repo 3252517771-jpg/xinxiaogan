@@ -1,7 +1,7 @@
 import { mockRequest } from '@/services/mock/api.mock'
 
 const BASE_URL = import.meta.env.DEV ? '/api' : '/api'
-const USE_MOCK_API = import.meta.env.DEV
+const USE_MOCK_API = import.meta.env.DEV && import.meta.env.VITE_USE_MOCK_API !== 'false'
 
 export interface ApiResponse<T> {
   code: number
@@ -31,7 +31,15 @@ export async function request<T>(endpoint: string, options: RequestInit = {}): P
   })
 
   if (!response.ok) {
-    throw new Error(await response.text())
+    const errorText = await response.text()
+    let message = errorText
+    try {
+      const errorBody = JSON.parse(errorText) as { detail?: string; message?: string }
+      message = errorBody.detail ?? errorBody.message ?? errorText
+    } catch {
+      message = errorText
+    }
+    throw new Error(message)
   }
 
   return response.json() as Promise<T>

@@ -1,5 +1,11 @@
-import { initialAuthState } from '@/store/authStore'
+import { useContext } from 'react'
+import { AuthContext } from '@/store/authStore'
 
 export function useAuth() {
-  return initialAuthState
+  const auth = useContext(AuthContext)
+  if (!auth) {
+    throw new Error('useAuth must be used within AuthProvider')
+  }
+
+  return auth
 }

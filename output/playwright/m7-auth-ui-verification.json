@@ -1,0 +1,21 @@
+{
+  "username": "m7_ui_1781139968654",
+  "steps": [
+    {
+      "name": "protected route redirects while logged out",
+      "url": "http://127.0.0.1:5173/",
+      "loginVisible": true
+    },
+    {
+      "name": "register stores jwt and unlocks homepage",
+      "tokenPresent": true,
+      "personalNavVisible": true
+    },
+    {
+      "name": "protected route opens after jwt exists",
+      "url": "http://127.0.0.1:5173/sleep",
+      "sleepPageVisible": true
+    }
+  ],
+  "passed": true
+}

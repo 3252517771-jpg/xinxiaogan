@@ -5,6 +5,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
 
 from app.config import get_settings
+from app.models import Base
 
 
 class DatabasePing(TypedDict):
@@ -45,6 +46,11 @@ async def ping_database() -> DatabasePing:
         "result": int(scalar_result),
         "database_url_driver": get_database_driver_name(),
     }
+
+
+async def init_database() -> None:
+    async with engine.begin() as connection:
+        await connection.run_sync(Base.metadata.create_all)
 
 
 async def dispose_engine() -> None:
