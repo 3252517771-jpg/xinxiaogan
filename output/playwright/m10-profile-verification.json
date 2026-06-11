@@ -1,0 +1,18 @@
+{
+  "pageLoaded": true,
+  "saveFlow": {
+    "nicknameValue": "小洋裙Pro",
+    "toast": "资料已保存，已同步到当前本地档案。"
+  },
+  "historyFilter": {
+    "visibleDietRows": 1,
+    "visibleSleepRows": 0,
+    "counterText": "当前显示 1 / 1 条"
+  },
+  "exportFlow": {
+    "suggestedFilename": "xinxiaogan-profile-export.csv",
+    "savedFile": true,
+    "fileSize": 674,
+    "toast": "CSV 已导出到本地下载。"
+  }
+}
