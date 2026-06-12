@@ -69,6 +69,16 @@ M13 部署上线只能使用 Git 拉取流程：
 
 禁止把本地项目打包后上传到服务器作为部署方式；禁止在服务器上直接接收本地压缩包覆盖代码。若 Gitee 镜像不可用，先修复 Gitee 同步链路，再继续部署。
 
+### 原则2.3：M13 不得影响同服务器 dji-rental
+
+小心肝与既有 `dji-rental` 项目部署在同一台 ECS 上，必须保持隔离：
+
+1. 禁止修改、删除或覆盖 `/opt/dji-rental/` 下任何文件。
+2. 禁止改动 `/etc/supervisor/conf.d/dji-rental.conf`。
+3. 禁止改动 `dji-rental` 的 Nginx 站点配置和域名 `moomlostdress.cn`。
+4. 禁止占用或变更 `dji-rental` 使用的 `127.0.0.1:5000` 端口。
+5. M13 验收时必须确认 `supervisorctl status dji-rental` 仍为 `RUNNING`，且 `moomlostdress.cn` 可访问。
+
 ### 原则3：一文件一职责
 
 - 一个 `.tsx` 文件只导出一个组件
