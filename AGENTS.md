@@ -12,14 +12,19 @@
 |------|------|
 | 项目名 | 小心肝（XiaoXinGan） |
 | 当前迭代 | v2.0「AI 陪伴版」（基于 v1.0 M1-M11 已完成） |
-| 技术栈 | React 18 + TS + Vite / Tailwind 3.4 / Python FastAPI / PostgreSQL |
+| 技术栈 | React 18 + TS + Vite / Tailwind 3.4 / Python FastAPI / SQLite |
 | ML 栈 | scikit-learn + joblib（FastAPI 内嵌推理，不额外部署 ML 服务） |
 | AI 建议 | DeepSeek API（外部调用，数据经 Privacy Guard 脱敏后发送） |
 | 推送 | Server酱（微信通知，用户自备 SendKey） |
 | 定时任务 | APScheduler（FastAPI 内嵌，无需 Celery） |
 | 后端Python环境 | Conda `D:\conda-envs\claude-code`（通过 `A:\python1\Scripts\conda.exe run -p D:\conda-envs\claude-code ...` 执行） |
 | 动画引擎 | GSAP + React Bits（二者互补，不互替） |
-| 部署 | 阿里云 ECS + 七牛云 CDN |
+| 部署 | 阿里云 ECS `121.43.146.242` + 七牛云 CDN |
+| 部署方式 | git（本地推送 GitHub 主仓 + Gitee 镜像；ECS 仅从 Gitee clone/pull） |
+| 域名 | `xinxiaogan.moomlostdress.cn`（HTTPS via Certbot） |
+| 后端进程 | Uvicorn（Supervisor 守护，端口 8001） |
+| 生产数据库 | SQLite（`/opt/xinxiaogan/xinxiaogan.db`） |
+| Git 工作流 | 本地 → 推送 GitHub（主力）+ 推送 Gitee（国内镜像）；ECS → 从 Gitee `git clone` / `git pull` 拉代码 |
 | 素材路径 | `A:\网站素材\图片|视频\` → 七牛云外链 |
 | 核心文档 | 见第六条引用 |
 
@@ -53,6 +58,16 @@ Mock 只允许作为显式调试模式存在：必须通过 `VITE_USE_MOCK_API=t
 如后端依赖缺失，先在该环境内执行 `python -m pip install -r backend\requirements.txt`，再运行验证。
 
 > v2.0 新增依赖：`scikit-learn`, `joblib`, `openai`, `apscheduler`, `httpx`。ML 训练环境同样使用此 Conda 环境。
+
+### 原则2.2：M13 部署必须走 Gitee 拉取
+
+M13 部署上线只能使用 Git 拉取流程：
+
+1. 本地先提交并推送到 GitHub 主仓。
+2. 本地同步推送到 Gitee 国内镜像。
+3. ECS 服务器只允许从 Gitee 执行 `git clone` 或 `git pull` 拉取项目代码。
+
+禁止把本地项目打包后上传到服务器作为部署方式；禁止在服务器上直接接收本地压缩包覆盖代码。若 Gitee 镜像不可用，先修复 Gitee 同步链路，再继续部署。
 
 ### 原则3：一文件一职责
 
@@ -116,7 +131,6 @@ v2.0 迭代严格遵守**最小化变更原则**：
 #### 🆕 v2.0 不做（即使技术可行）
 
 - M12 开发维护模式（留到 v2.0 之后）
-- M13 部署上线（留到 v2.0 之后）
 - ML 模型深度学习 / 神经网络（本期只做 scikit-learn）
 - 多渠道推送（本期只做 Server酱 微信推送）
 - 推送数据统计 / 用户留存分析
@@ -215,6 +229,7 @@ v2.0 迭代严格遵守**最小化变更原则**：
 | `docs/前端技术方案与实施计划.md` | 目录结构、模块边界、接口协议、Sprint计划 | 改代码前 |
 | `docs/数据库设计.md` | 11张表完整建表SQL、TS类型定义、评分公式 | 建后端模型/类型前 |
 | 🆕 `docs/v2.0-ai-companion-design.md` | v2.0 架构设计、API扩展、Privacy Guard、推送方案 | 实施 v2.0 Sprint 前 |
+| 🆕 `xinxiaogan-m13-deployment-plan.md` | M13 部署方案（域名/Nginx/Git工作流/部署流程） | M13 部署前 |
 
 ---
 
@@ -258,7 +273,7 @@ v2.0 迭代严格遵守**最小化变更原则**：
 | M10 | 个人主页 | ✅ |
 | M11 | 底部导航 + 首版收口 | ✅ |
 | M12 | 开发维护模式 | ⏳ 延后 |
-| M13 | 部署上线 | ⏳ 延后 |
+| M13 | 部署上线 | ✅ 已完成 |
 
 #### 🆕 v2.0 里程碑
 
