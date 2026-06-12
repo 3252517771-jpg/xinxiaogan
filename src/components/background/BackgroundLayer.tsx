@@ -9,10 +9,12 @@ interface BackgroundLayerProps {
   onSceneEnded?: (state: VideoScene['state']) => void
 }
 
-function BackgroundLayer({ image = '棣栭〉鍥?png', video, scene, onSceneEnded }: BackgroundLayerProps) {
+function BackgroundLayer({ image = '首页图.png', video, scene, onSceneEnded }: BackgroundLayerProps) {
   const [activeVideoSrc, setActiveVideoSrc] = useState<string | null>(scene?.source ?? (video ? assetUrl(video) : null))
+  const [isVideoReady, setIsVideoReady] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const replayTimeoutRef = useRef<number | null>(null)
+  const readyTimeoutRef = useRef<number | null>(null)
 
   useEffect(() => {
     if (scene?.source) {
@@ -29,21 +31,37 @@ function BackgroundLayer({ image = '棣栭〉鍥?png', video, scene, onSceneEnde
       return
     }
 
+    setIsVideoReady(false)
+
     if (replayTimeoutRef.current) {
       window.clearTimeout(replayTimeoutRef.current)
       replayTimeoutRef.current = null
     }
 
+    if (readyTimeoutRef.current) {
+      window.clearTimeout(readyTimeoutRef.current)
+      readyTimeoutRef.current = null
+    }
+
     node.loop = scene?.loop ?? true
     node.currentTime = 0
+    node.pause()
+    node.load()
 
-    void node.play().catch(() => {})
+    readyTimeoutRef.current = window.setTimeout(() => {
+      setIsVideoReady(true)
+      void node.play().catch(() => {})
+      readyTimeoutRef.current = null
+    }, 1800)
   }, [activeVideoSrc, scene?.loop])
 
   useEffect(() => {
     return () => {
       if (replayTimeoutRef.current) {
         window.clearTimeout(replayTimeoutRef.current)
+      }
+      if (readyTimeoutRef.current) {
+        window.clearTimeout(readyTimeoutRef.current)
       }
     }
   }, [])
@@ -55,11 +73,25 @@ function BackgroundLayer({ image = '棣栭〉鍥?png', video, scene, onSceneEnde
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden bg-forest-deep">
+      <img alt="" className="absolute inset-0 h-full w-full object-cover" src={poster} />
       {activeVideoSrc ? (
         <video
-          autoPlay
-          className={videoClassName}
+          className={`${videoClassName} relative opacity-0 ${isVideoReady ? 'opacity-100' : ''}`.trim()}
           muted
+          onCanPlayThrough={() => {
+            const node = videoRef.current
+            if (!node) {
+              return
+            }
+
+            if (readyTimeoutRef.current) {
+              window.clearTimeout(readyTimeoutRef.current)
+              readyTimeoutRef.current = null
+            }
+
+            setIsVideoReady(true)
+            void node.play().catch(() => {})
+          }}
           onEnded={() => {
             if (scene?.freezeOnEnd) {
               const node = videoRef.current
@@ -97,11 +129,12 @@ function BackgroundLayer({ image = '棣栭〉鍥?png', video, scene, onSceneEnde
           }}
           playsInline
           poster={poster}
+          preload="metadata"
           ref={videoRef}
           src={activeVideoSrc}
         />
       ) : (
-        <img alt="" className="h-full w-full object-cover" src={poster} />
+        null
       )}
     </div>
   )
