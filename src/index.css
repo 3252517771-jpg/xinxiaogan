@@ -6,6 +6,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-display: swap;
+  font-family: 'ForestDisplay';
+  font-style: normal;
+  font-weight: 700;
+  src: url('/fonts/forest-display-bold.ttf') format('truetype');
+}
+
 :root {
   color-scheme: dark;
   --forest-deep: #0f1c15;
@@ -38,7 +46,7 @@ body {
     radial-gradient(circle at 85% 8%, rgba(255, 232, 168, 0.08), transparent 28%),
     linear-gradient(135deg, #0f1c15 0%, #1f2a1d 48%, #0f1c15 100%);
   color: var(--text-primary);
-  font-family: 'Noto Sans SC', 'Noto Serif SC', sans-serif;
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', system-ui, sans-serif;
 }
 
 button,

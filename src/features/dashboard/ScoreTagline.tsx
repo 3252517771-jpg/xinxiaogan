@@ -15,7 +15,7 @@ function ScoreTagline({ locked = false }: ScoreTaglineProps) {
       <div className="mb-5 flex items-center gap-3">
         <span className="split-text-word text-xs uppercase tracking-[0.34em] text-white/58">Your health, the forest knows.</span>
       </div>
-      <h1 className="font-['Georgia','Cambria','Times_New_Roman',serif] text-[clamp(76px,7.4vw,142px)] font-black leading-[0.88] text-white">
+      <h1 className="font-['ForestDisplay','Georgia','Cambria','Times_New_Roman',serif] text-[clamp(76px,7.4vw,142px)] font-black leading-[0.88] text-white">
         {titleLines.map((line) => (
           <span className="block overflow-hidden py-1" key={line.join('-')}>
             {line.map((word) => {

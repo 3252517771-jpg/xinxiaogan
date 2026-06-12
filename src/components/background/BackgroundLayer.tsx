@@ -15,6 +15,7 @@ function BackgroundLayer({ image = '首页图.png', video, scene, onSceneEnded }
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const replayTimeoutRef = useRef<number | null>(null)
   const readyTimeoutRef = useRef<number | null>(null)
+  const playStartedRef = useRef(false)
 
   useEffect(() => {
     if (scene?.source) {
@@ -25,6 +26,29 @@ function BackgroundLayer({ image = '首页图.png', video, scene, onSceneEnded }
     setActiveVideoSrc(video ? assetUrl(video) : null)
   }, [scene?.source, video])
 
+  const startVideoWhenBuffered = () => {
+    const node = videoRef.current
+    if (!node || playStartedRef.current) {
+      return
+    }
+
+    const bufferedEnd = node.buffered.length > 0 ? node.buffered.end(node.buffered.length - 1) : 0
+    const hasEnoughBuffer = node.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA || bufferedEnd >= Math.min(2, node.duration || 2)
+
+    if (!hasEnoughBuffer) {
+      return
+    }
+
+    if (readyTimeoutRef.current) {
+      window.clearTimeout(readyTimeoutRef.current)
+      readyTimeoutRef.current = null
+    }
+
+    playStartedRef.current = true
+    setIsVideoReady(true)
+    void node.play().catch(() => {})
+  }
+
   useEffect(() => {
     const node = videoRef.current
     if (!node) {
@@ -32,6 +56,7 @@ function BackgroundLayer({ image = '首页图.png', video, scene, onSceneEnded }
     }
 
     setIsVideoReady(false)
+    playStartedRef.current = false
 
     if (replayTimeoutRef.current) {
       window.clearTimeout(replayTimeoutRef.current)
@@ -49,10 +74,11 @@ function BackgroundLayer({ image = '首页图.png', video, scene, onSceneEnded }
     node.load()
 
     readyTimeoutRef.current = window.setTimeout(() => {
+      playStartedRef.current = true
       setIsVideoReady(true)
       void node.play().catch(() => {})
       readyTimeoutRef.current = null
-    }, 1800)
+    }, 3200)
   }, [activeVideoSrc, scene?.loop])
 
   useEffect(() => {
@@ -79,18 +105,10 @@ function BackgroundLayer({ image = '首页图.png', video, scene, onSceneEnded }
           className={`${videoClassName} relative opacity-0 ${isVideoReady ? 'opacity-100' : ''}`.trim()}
           muted
           onCanPlayThrough={() => {
-            const node = videoRef.current
-            if (!node) {
-              return
-            }
-
-            if (readyTimeoutRef.current) {
-              window.clearTimeout(readyTimeoutRef.current)
-              readyTimeoutRef.current = null
-            }
-
-            setIsVideoReady(true)
-            void node.play().catch(() => {})
+            startVideoWhenBuffered()
+          }}
+          onProgress={() => {
+            startVideoWhenBuffered()
           }}
           onEnded={() => {
             if (scene?.freezeOnEnd) {
