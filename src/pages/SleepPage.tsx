@@ -39,7 +39,7 @@ function SleepPage() {
 
   return (
     <>
-      <BackgroundLayer image="图片一.png" onSceneEnded={handleVideoEnded} scene={scene} />
+      <BackgroundLayer image="图一.png" onSceneEnded={handleVideoEnded} scene={scene} />
       <PageTransition>
         <PageHeader score={score} title="作息分析" />
         <MagicBentoLayout align="right">

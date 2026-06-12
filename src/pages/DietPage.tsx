@@ -40,7 +40,7 @@ function DietPage() {
 
   return (
     <>
-      <BackgroundLayer image="图片二.png" onSceneEnded={handleVideoEnded} scene={scene} />
+      <BackgroundLayer image="图二.png" onSceneEnded={handleVideoEnded} scene={scene} />
       <PageTransition>
         <PageHeader score={score} title="饮食分析" />
         <ThreeColumnLayout

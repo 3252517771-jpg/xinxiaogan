@@ -45,7 +45,7 @@ function RiskPage() {
 
   return (
     <>
-      <BackgroundLayer image="图片五.png" onSceneEnded={handleVideoEnded} scene={scene} />
+      <BackgroundLayer image="图五.png" onSceneEnded={handleVideoEnded} scene={scene} />
       <PageTransition>
         <PageHeader score={score} title="健康风险" />
         <ThreeColumnLayout

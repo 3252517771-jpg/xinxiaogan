@@ -39,7 +39,7 @@ function ExercisePage() {
 
   return (
     <>
-      <BackgroundLayer image="图片三.png" onSceneEnded={handleVideoEnded} scene={scene} />
+      <BackgroundLayer image="图三.png" onSceneEnded={handleVideoEnded} scene={scene} />
       <PageTransition>
         <PageHeader score={score} title="运动分析" />
         <MagicBentoLayout align="left">

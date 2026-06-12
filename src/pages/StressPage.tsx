@@ -40,7 +40,7 @@ function StressPage() {
 
   return (
     <>
-      <BackgroundLayer image="图片四.png" onSceneEnded={handleVideoEnded} scene={scene} />
+      <BackgroundLayer image="图四.png" onSceneEnded={handleVideoEnded} scene={scene} />
       <PageTransition>
         <PageHeader score={score} title="压力分析" />
         <ThreeColumnLayout
